@@ -12,26 +12,33 @@ class CreateGetPCN(APIView):
     def post(self, request):
         data = request.data
         user = request.user
-        data["user"] = user.id
         
         vehicle = request.data.get("vehicle")
-        data["vehicle"] = Vehicle.objects.get(id=vehicle)
+        pcn = request.data.get("pcn")
+        date_of_notice = request.data.get("date_of_notice")
+        front_ticket_image = request.data.get("front_ticket_image")
+        back_ticket_image = request.data.get("back_ticket_image")
+        ticket_type = request.data.get("ticket_type")
+        date_of_notice = request.data.get("date_of_notice")
+        vehicle = Vehicle.objects.get(id=vehicle)
         
-        serilizer = PCNSerializer(data=data)
-        
-        
-        if serilizer.is_valid():
-            serilizer.save()
-            return ResponseGenerator.response(
-                data=PCNSerializer(serilizer.instance).data,
-                status=status.HTTP_201_CREATED,
-                message="PCN created successfully"
-            )
-        return ResponseGenerator.response(
-            message=serilizer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-            data={}
+        pcn = PCN.objects.create(
+            ticket_type=ticket_type,
+            pcn=pcn,
+            date_of_notice=date_of_notice,
+            vehicle=vehicle,
+            front_ticket_image=front_ticket_image,
+            back_ticket_image=back_ticket_image,
+            user=user,
         )
+        
+        
+        return ResponseGenerator.response(
+            data=PCNSerializer(pcn).data,
+            status=status.HTTP_201_CREATED,
+            message="PCN created successfully"
+        )
+        
         
     def get(self, request):
         user = request.user

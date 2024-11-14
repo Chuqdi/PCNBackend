@@ -14,8 +14,7 @@ class PCN(models.Model):
     is_paid = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
-    def __str__(self) -> str:
-        return self.date_of_notice
+
     
     class Meta:
         ordering =("-id",)
