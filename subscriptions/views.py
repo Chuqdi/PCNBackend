@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework import status
+from subscriptions.models import Subscription
 from utils.ResponseGenerator import ResponseGenerator
 from users.serializers import SignUpSerializer
 from rest_framework import status
@@ -14,9 +15,16 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class UpgradeUserSubscriptionPlan(APIView):
     def put(self, request):
-        subscription = request.data.get("subscription")
+        name = request.data.get("name")
+        period = request.data.get("period")
+        subscription = Subscription.objects.create(
+            name=name,
+            period=period,
+        )
         user = request.user
         user.subscription = subscription
+        user.vehicle_count = 0
+        user.pcn_count = 0
         user.save()
         
         return ResponseGenerator.response(

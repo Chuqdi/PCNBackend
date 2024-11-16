@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
+from users.serializers import SignUpSerializer
 from utils.ResponseGenerator import ResponseGenerator
 from vehicles.models import Vehicle
 from .models import PCN
@@ -31,10 +32,15 @@ class CreateGetPCN(APIView):
             back_ticket_image=back_ticket_image,
             user=user,
         )
+        user.pcn_count = user.pcn_count + 1
+        user.save()
         
         
         return ResponseGenerator.response(
-            data=PCNSerializer(pcn).data,
+            data={
+                "data":PCNSerializer(pcn).data,
+                "user":SignUpSerializer(user).data
+            },
             status=status.HTTP_201_CREATED,
             message="PCN created successfully"
         )

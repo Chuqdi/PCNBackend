@@ -1,4 +1,5 @@
 from users.models import ReferalCode, User
+from subscriptions.serializers import SubscriptionSerializer
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -24,8 +25,10 @@ class ReferalCodeSerializer(serializers.ModelSerializer):
         ]
 
 
+        
 class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length =8)
+    subscription = SubscriptionSerializer(many=False, read_only=True)
     
     class Meta:
         model = User
@@ -44,7 +47,9 @@ class SignUpSerializer(serializers.ModelSerializer):
             "profile_image",
             "home_address",
             "is_staff",
-            "subscription"
+            "subscription",
+            "vehicle_count",
+            "pcn_count",
         ]
 
 
@@ -61,11 +66,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         user = super().create(validated_data)
         user.set_password(password)
         referalCode =checkUserCodeExist()
-        r =ReferalCode.objects.create(user=user, code = referalCode)
+        ReferalCode.objects.create(user=user, code = referalCode)
         customer = stripe.Customer.create(
         name=user.full_name,
         email=user.email,
         )
+        user.referalCode = referalCode
         user.stripe_id = customer.id
         Token.objects.create(user=user)
         user.save()

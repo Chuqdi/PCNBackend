@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
+from users.serializers import SignUpSerializer
 from utils.ResponseGenerator import ResponseGenerator
 from vehicles.models import Vehicle
 from vehicles.serializers import VehicleSerializer
@@ -32,9 +33,7 @@ class EditVehicleView(APIView):
 
 class CreateGetVehicle(APIView):
     def post(self, request):
-        data = request.data
         user = request.user
-        data["user"] = user.id
         
         vehicle_number = request.data.get("vehicle_number")
         
@@ -45,22 +44,25 @@ class CreateGetVehicle(APIView):
                 data={}
             )
        
+        vehicle_make = request.data.get("vehicle_make")
         
-        serilizer = VehicleSerializer(data=data)
-        
-        if serilizer.is_valid():
-            serilizer.save()
-            return ResponseGenerator.response(
-                data=VehicleSerializer(serilizer.instance).data,
-                status=status.HTTP_201_CREATED,
-                message="Vehicle created successfully"
-            )
-        print(serilizer.errors)
-        return ResponseGenerator.response(
-            message=serilizer.errors,
-            status=status.HTTP_400_BAD_REQUEST,
-            data={}
+        vehicle = Vehicle.objects.create(
+            vehicle_make = vehicle_make,
+            vehicle_number = vehicle_number,
+            user = user,
         )
+        user.vehicle_count = user.vehicle_count +1
+        user.save()
+        
+        return ResponseGenerator.response(
+            data={
+                "data":VehicleSerializer(vehicle).data,
+                "user":SignUpSerializer(user).data
+                },
+            status=status.HTTP_201_CREATED,
+            message="Vehicle created successfully"
+        )
+        
         
     def get(self, request):
         user = request.user

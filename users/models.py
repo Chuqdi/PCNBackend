@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
-from enum import Enum
+
+from subscriptions.models import Subscription
 
 
 
@@ -41,9 +42,8 @@ class UserManager(BaseUserManager):
         return user
 
 
-class SubscriptionType(Enum):
-    QUARTERLY = "QUARTERLY"
-    YEARLY = "YEARLY"
+
+
 
 class User(AbstractUser):
     username = models.CharField(null=True, blank=True,max_length=150)
@@ -52,12 +52,11 @@ class User(AbstractUser):
     email  = models.EmailField(blank=False, null=False, unique=True,max_length=200, db_index=True)
     home_address = models.TextField(blank=True, null=True)
     stripe_id = models.TextField()
-    subscription = models.CharField(max_length=200, 
-      choices=[(status.name, status.value) for status in SubscriptionType],  
-      null=True, blank=True                      
-     )
+    subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
     is_new = models.BooleanField(default=True)
     is_active = models.BooleanField(default=False)
+    vehicle_count = models.IntegerField(default=0)
+    pcn_count = models.IntegerField(default=0)
     referalCode = models.CharField(max_length=100, null=True, blank=True)
     refered_by_code = models.CharField(max_length=100, null=True, blank=True)
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
