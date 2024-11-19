@@ -50,6 +50,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "subscription",
             "vehicle_count",
             "pcn_count",
+            "walletCount"
         ]
 
 

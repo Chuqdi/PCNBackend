@@ -33,6 +33,7 @@ class CreateGetPCN(APIView):
             user=user,
         )
         user.pcn_count = user.pcn_count + 1
+        user.walletCount = user.walletCount -10
         user.save()
         
         

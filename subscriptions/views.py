@@ -16,7 +16,9 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class UpgradeUserSubscriptionPlan(APIView):
     def put(self, request):
         name = request.data.get("name")
+        walletCount = request.data.get("walletCount")
         period = request.data.get("period")
+        print(request.data)
         subscription = Subscription.objects.create(
             name=name,
             period=period,
@@ -25,6 +27,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.subscription = subscription
         user.vehicle_count = 0
         user.pcn_count = 0
+        user.walletCount = walletCount
         user.save()
         
         return ResponseGenerator.response(
