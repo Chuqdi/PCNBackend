@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from users.serializers import SignUpSerializer
@@ -8,11 +7,11 @@ from .models import PCN
 from .serializers import PCNSerializer
 
 
-
 class CreateGetPCN(APIView):
     def post(self, request):
         data = request.data
         user = request.user
+
         
         vehicle = request.data.get("vehicle")
         pcn = request.data.get("pcn")
@@ -20,6 +19,7 @@ class CreateGetPCN(APIView):
         front_ticket_image = request.data.get("front_ticket_image")
         back_ticket_image = request.data.get("back_ticket_image")
         ticket_type = request.data.get("ticket_type")
+        amount = request.data.get("amount")
         date_of_notice = request.data.get("date_of_notice")
         vehicle = Vehicle.objects.get(id=vehicle)
         
@@ -30,11 +30,13 @@ class CreateGetPCN(APIView):
             vehicle=vehicle,
             front_ticket_image=front_ticket_image,
             back_ticket_image=back_ticket_image,
+            amount = amount,
             user=user,
         )
         user.pcn_count = user.pcn_count + 1
-        user.walletCount = user.walletCount -10
+        user.walletCount = user.walletCount -int(amount)
         user.save()
+        
         
         
         return ResponseGenerator.response(

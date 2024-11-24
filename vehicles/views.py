@@ -16,7 +16,10 @@ class EditVehicleView(APIView):
             if serializer.is_valid():
                 serializer.save()
                 return ResponseGenerator.response(
-                    data=serializer.data,
+                    data={
+                        "data":serializer.data,
+                        "user":SignUpSerializer(request.user).data
+                        },
                     status=status.HTTP_200_OK,
                     message="Vehicle updated successfully"
                 )

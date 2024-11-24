@@ -1,3 +1,4 @@
+import threading
 import stripe
 from django.conf import settings
 from django.http import JsonResponse
@@ -8,9 +9,186 @@ from utils.ResponseGenerator import ResponseGenerator
 from users.serializers import SignUpSerializer
 from rest_framework import status
 from rest_framework.views import APIView
-
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
+from users.models import DeviceToken, User
+import json
+from django.template.loader import render_to_string
+from utils.tasks import  send_email
+from firebase_admin import messaging
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
+
+def handleReferalCreditting(instance:User):
+        if not instance.isReferalUsed and instance.refered_by_code:
+            print("started")
+            referalTitle="Referal bonus"
+            referalMessage = "You have received a £5 referal bonus"
+            refered_by = User.objects.get(referalCode = instance.refered_by_code)
+            refered = instance
+            
+            refered_by.walletCount = refered_by.walletCount + settings.REFERAL_CREDIT_AMOUNT
+            refered_by.save()
+            refered.walletCount = refered.walletCount + settings.REFERAL_CREDIT_AMOUNT
+            refered.isReferalUsed = True
+            refered.save()
+            
+            
+            
+            
+            message = render_to_string("emails/message.html", { "name":refered_by.full_name,"message":referalMessage})
+            t = threading.Thread(target=send_email, args=(referalTitle, message,[refered_by.email]))
+            t.start()
+            
+            message = render_to_string("emails/message.html", { "name":refered.full_name,"message":referalMessage})
+            t = threading.Thread(target=send_email, args=(referalTitle, message,[refered.email]))
+            t.start()
+
+
+
+            try:
+                user_token = DeviceToken.objects.get(user = refered_by)
+
+
+                n_message = messaging.Message(
+                notification=messaging.Notification(
+                    title=referalTitle,
+                    body=referalMessage,
+                ),
+                token=user_token.token.strip(),
+            )
+                messaging.send(n_message)
+                print("sent")
+            except Exception as e:
+                print(e)
+                
+            try:
+                user_token = DeviceToken.objects.get(user = refered)
+
+
+                n_message = messaging.Message(
+                notification=messaging.Notification(
+                    title=referalTitle,
+                    body=referalMessage,
+                ),
+                token=user_token.token.strip(),
+            )
+                messaging.send(n_message)
+                print("sent")
+            except Exception as e:
+                print(e)
+
+def userSubscriptionNotification(user:User):
+    title="Subscription was successful"
+    body="Your subscription has was successful"
+    
+    
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
+    try:
+        send_email(
+            message=message,
+            recipient_list=[user.email],
+            subject=title,
+            
+        )
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        
+    try:
+        user_token = DeviceToken.objects.get(user = user)
+
+
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=body,
+        ),
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+        print("sent")
+    except Exception as e:
+        print(e)
+
+
+def scheduleNotificationAfterCancelling(user:User, subscription:str):
+        today = datetime.today()
+        if subscription == "BASIC":
+            next_month = today + relativedelta(month=4)
+        else:
+            next_month = today + relativedelta(year=1)
+        
+        crontab,created = CrontabSchedule.objects.get_or_create(
+            minute=next_month.minute,
+            hour=next_month.hour,
+            day_of_month=next_month.day,
+            month_of_year=next_month.month
+        )
+        task_name = f"user_subscription_notification_after_cancelling_{user.id}"
+        try:
+            PeriodicTask.objects.get(name=task_name).delete()
+        except PeriodicTask.DoesNotExist:
+            pass
+        PeriodicTask.objects.create(
+            crontab=crontab,
+            task='utils.tasks.user_subscription_notification_after_cancelling',
+            name=task_name,
+            args=json.dumps(user.pk)
+        )
+        
+
+    
+def scheduleNotificationFor2DaysBeforeCancelling(is_one_off:bool,user:User, subscription:str):
+    if not is_one_off:
+        today = datetime.today()
+        next_month = today + relativedelta(months=1)
+        target_date = next_month - timedelta(days=2)
+        
+        crontab,created = CrontabSchedule.objects.get_or_create(
+            minute=target_date.minute,
+            hour=target_date.hour,
+            day_of_month=target_date.day,
+            month_of_year=target_date.month
+        )
+        task_name = f"user_subscription_notification_two_days_before_cancelling_{user.id}"
+        try:
+            PeriodicTask.objects.get(name=task_name).delete()
+        except PeriodicTask.DoesNotExist:
+            pass
+        PeriodicTask.objects.create(
+            crontab=crontab,
+            task='utils.tasks.user_subscription_notification_two_days_before_cancelling',
+            name=task_name,
+            args=json.dumps(user.pk)
+        )
+    else:
+        today = datetime.today()
+        if subscription == "BASIC":
+            next_month = today + relativedelta(month=4)
+        else:
+            next_month = today + relativedelta(year=1)
+        target_date = next_month - timedelta(days=2)
+        
+        crontab,created = CrontabSchedule.objects.get_or_create(
+            minute=target_date.minute,
+            hour=target_date.hour,
+            day_of_month=target_date.day,
+            month_of_year=target_date.month
+        )
+        task_name = f"user_subscription_notification_two_days_before_cancelling_{user.id}"
+        try:
+            PeriodicTask.objects.get(name=task_name).delete()
+        except PeriodicTask.DoesNotExist:
+            pass
+        PeriodicTask.objects.create(
+            crontab=crontab,
+            task='utils.tasks.user_subscription_notification_two_days_before_cancelling',
+            name=task_name,
+            args=json.dumps(user.pk)
+        )
+        
 
 
 class UpgradeUserSubscriptionPlan(APIView):
@@ -18,7 +196,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         name = request.data.get("name")
         walletCount = request.data.get("walletCount")
         period = request.data.get("period")
-        print(request.data)
+        is_one_off = request.data.get("isOneOff")
         subscription = Subscription.objects.create(
             name=name,
             period=period,
@@ -29,6 +207,24 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.pcn_count = 0
         user.walletCount = walletCount
         user.save()
+        
+        
+        scheduleNotificationFor2DaysBeforeCancelling(
+            is_one_off=is_one_off,
+            user=user,
+            subscription=name
+        )
+        scheduleNotificationAfterCancelling(
+            user=user,
+            subscription=name
+        )
+        
+        t = threading.Thread(target=userSubscriptionNotification, args=(user,))
+        t.start()
+        
+        
+        handleReferalCreditting(instance=user)
+        
         
         return ResponseGenerator.response(
             data=SignUpSerializer(user).data,

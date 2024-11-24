@@ -1,15 +1,15 @@
 import threading
 from celery import shared_task
 from utils.helpers import generateSecureEmailCredentials
-from django.db.models import Count
 from firebase_admin import messaging
-import random
 from .EmailSender import SendEmail, send_activation_email
-from users.models import User
+from users.models import DeviceToken, User
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.template.loader import render_to_string 
 from django.core.mail import EmailMessage
+
+
+
 
 
 
@@ -24,6 +24,80 @@ BOT_ACCOUNT_EMAILS = [
    "berkleyduffy@yahoo.com",
    "nexusstaffs@yahoo.com"
 ]
+
+
+
+@shared_task
+def user_subscription_notification_two_days_before_cancelling(user_id):
+    user = User.objects.get(user_id=user_id)
+    body ="Your subscription wil be cancelled in two days"
+    title="Subscription cancelled"
+    
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
+    
+    try:
+        send_email(
+            message=message,
+            recipient_list=[user.email],
+            subject=title,
+            
+        )
+    except Exception as e:
+        print(f"Error sending email: {e}")
+    
+    
+    try:
+        user_token = DeviceToken.objects.get(user = user)
+
+
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=body,
+        ),
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+        print("sent")
+    except Exception as e:
+        print(e)
+
+@shared_task
+def user_subscription_notification_after_cancelling(user_id):
+    user = User.objects.get(user_id=user_id)
+    user.subscription = None
+    user.save()
+    title="Subscription cancelled"
+    body="Your subscription has been cancelled"
+    
+    
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
+    try:
+        send_email(
+            message=message,
+            recipient_list=[user.email],
+            subject=title,
+            
+        )
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        
+    try:
+        user_token = DeviceToken.objects.get(user = user)
+
+
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=body,
+        ),
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+        print("sent")
+    except Exception as e:
+        print(e)
+
 
 
 def botMessages(first_name:str, last_name:str, number):
@@ -91,15 +165,7 @@ def actionNotificationEmail(message, to, title=""):
 
 
 
-@shared_task(serializer='pickle')
-def saveInterviewVideo(video, question, role_id):
-    role = Role.objects.get(id=role_id)
-    iq = InterviewQuestion.objects.create(
-            question = question,
-            video = video,
-        )
-    role.interviewQuestions.add(iq)
-    role.save()
+
 
 
 

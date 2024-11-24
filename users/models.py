@@ -60,6 +60,7 @@ class User(AbstractUser):
     walletCount = models.IntegerField(default=0)
     referalCode = models.CharField(max_length=100, null=True, blank=True)
     refered_by_code = models.CharField(max_length=100, null=True, blank=True)
+    isReferalUsed = models.BooleanField(default=False)
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
 
     USERNAME_FIELD = 'email'
@@ -80,6 +81,12 @@ class User(AbstractUser):
 
 
 
+class DeviceToken(models.Model):
+    token = models.TextField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.user.email
 
 
 class ReferalCode(models.Model):

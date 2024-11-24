@@ -1,0 +1,12 @@
+{%include "emails/helpers/header.html" %}
+<tr width="100%">
+  <td style="padding: 20px">
+    <p class="text">Hi {{ name }},</p>
+
+    <p class="text" style="background: #e6fef2;padding: 20px; border-radius: 8px;">
+      {{ message }}
+    </p>
+  </td>
+</tr>
+
+{%include "emails/helpers/footer.html" %}

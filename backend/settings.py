@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     "storages",
+    'django.contrib.staticfiles',
     "rest_framework",
     'django_celery_beat',
     'django_celery_results',
@@ -141,10 +144,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+
+
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
@@ -153,20 +159,53 @@ AUTH_USER_MODEL = "users.User"
 STRIPE_SECRET_KEY ="sk_test_51NuLgnA3T5bTc4ZwW0aZ1bDOtqg7ciR0CfKfTnRqJBBiy3aPiXChQNPt596pD8Ybj4qpB8MFxFawzDI2Rr5y536F00zbCPnjce"
 
 
+
+
+
+
+# CELERY_BROKER_URL = "rediss://default:AVNS_kobLCmjKB15OTYSSnpr@db-redis-nyc3-24025-do-user-16518620-0.c.db.ondigitalocean.com:25061"
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
+CELERY_RESULT_SERIALIZER = 'pickle'
+CELERY_TASK_SELERLIZER = 'pickle'
+CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_IMPORTS = ("utils",)
+
+
+
+
+
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+DEFAULT_FROM_EMAIL = "Jobofa<admin@jobofa.com>"
+EMAIL_HOST_USER = "admin@jobofa.com"
+EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"
+
+
+
 # AWS CONFIGURATIONS
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 AWS_ACCESS_KEY_ID = "AKIAQXZDR553VZ447CO4"
 AWS_SECRET_ACCESS_KEY = "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"
 AWS_DEFAULT_ACL = None
-AWS_STORAGE_BUCKET_NAME = "hookedapp1"
+AWS_STORAGE_BUCKET_NAME = "pcnticket1"
 AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
 AWS_LOCATION = "static"
-
-
-# STATICFILES_STORAGE = os.path.join(BASE_DIR, 'static')
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FROM_EMAIL = "Hooked <support@jobaffairs.co>"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+
+cred = credentials.Certificate(BASE_DIR.joinpath("pcnticket-de55b-firebase-adminsdk-2trso-e60c2a092d.json"))
+firebase_admin.initialize_app(cred)
+
+
+REFERAL_CREDIT_AMOUNT = 5

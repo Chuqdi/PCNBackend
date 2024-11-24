@@ -1,6 +1,6 @@
 import threading
 from django.shortcuts import render
-from users.models import ReferalCode, User
+from users.models import DeviceToken, ReferalCode, User
 from users.serializers import (
     ReferalCodeSerializer,
     SignUpSerializer,
@@ -23,6 +23,24 @@ from django.utils.encoding import force_str
 from utils.helpers import generateUserOTP, validateOTPCode
 from utils.TokenGenerator import generateToken
 from datetime import date
+
+
+
+
+
+class AddUserDeviceToken(APIView):
+    permission_classes = [permissions.IsAuthenticated ]
+    def post(self, request):
+        token = request.data.get("token")
+
+        user = request.user
+
+        tokenInstance, created = DeviceToken.objects.get_or_create(user = user)
+        tokenInstance.token= token
+        tokenInstance.save()
+
+        
+        return ResponseGenerator.response(status=status.HTTP_201_CREATED, data={}, message="Device token added successfully")
 
 
 
@@ -178,7 +196,7 @@ class RegisterUserView(APIView):
 
             message = render_to_string("emails/welcome.html", { "name":f"{first_name} {last_name}"})
             t = threading.Thread(target=send_email, args=(f"Welcome {first_name}", message,[email]))
-            # t.start()
+            t.start()
 
             user = User.objects.get(email=email)
             user.is_active= True
@@ -350,31 +368,25 @@ class ForgotPasswordRequest(APIView):
         user = User.objects.filter(email= email)
 
         if not user.exists():
-            return Response(
+            return ResponseGenerator.response(
             data={
-                "error": "Sorry, User with this email does not exist",
             },
+            message= "Sorry, User with this email does not exist",
             status=status.HTTP_400_BAD_REQUEST,
         )
         
 
         c = generateUserOTP(user[0].email)
-        first_name = user[0].first_name
-        last_name = user[0].last_name
-        message = render_to_string("emails/activation.html", { "code":c, "name":f"{first_name} {last_name}"})
+        message = render_to_string("emails/message.html", { "message":c, "name":f"{user[0].full_name}"})
         t = threading.Thread(target=send_email, args=("Verification process", message,[email]))
         t.start()
         
 
 
-
-       
-
         
-        return Response(
-            data={
-                "message": f"Forgot Password code sent to email.",
-            },
+        return ResponseGenerator.response(
+            message=f"Forgot Password code sent to email.",
+            data=SignUpSerializer(user[0]).data,
             status=status.HTTP_200_OK,
         )
 
@@ -396,11 +408,9 @@ class ContinueForgotOTPPassword(APIView):
         user = validatingOTP.get("code").user
         
 
-        return Response(
-            data={
-                "message": "User password updated successfully",
-                "user":SignUpSerializer(user).data
-            },
+        return ResponseGenerator.response(
+            data=SignUpSerializer(user).data,
+            message= "User password updated successfully",
             status=status.HTTP_200_OK,
         )
 
@@ -416,9 +426,10 @@ class CompletePasswordReset(APIView):
         user.set_password(password)
         user.save()
 
-        return Response(data={
-            "message":"User password updated",
-        }, status=status.HTTP_202_ACCEPTED)
+        return ResponseGenerator.response(
+            data=SignUpSerializer(user).data,
+            message="User password updated",
+            status=status.HTTP_202_ACCEPTED)
 
 class GetUserWithID(APIView):
     def get(self, request, id):

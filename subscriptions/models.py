@@ -18,6 +18,7 @@ class Subscription(models.Model):
     period = models.CharField(max_length=200, 
       choices=[(status.name, status.value) for status in SubscriptionPeriodType],  
       null=True, blank=True)
+    is_one_off = models.BooleanField(default=False)
     date_subscripted = models.DateTimeField(default=timezone.now)
     
     

@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword
+from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken
 
 
 
@@ -13,6 +13,7 @@ urlpatterns = [
     
     ###ADMIN
     path("get_users/",GetPostAdministrators.as_view(),),
+    path("update_user_token/", AddUserDeviceToken.as_view(),),
     path("get_users_stats/", UsersStatsView.as_view(),),
     path("toggle_user_active_state/<int:id>/", ToggleUserActiveState.as_view()),
     path("edit_user_with_profile_image/",EditUserWithProfileImageView.as_view(),),
@@ -28,8 +29,8 @@ urlpatterns = [
     path("get_user_referal_code/", GetUserReferalCode.as_view(), name="get_user_referal_code"),
     path("forgot_password/", ForgotPasswordRequest.as_view(), name="forgot_password"),
     path("continue_forgot_password/", ContinueForgotOTPPassword.as_view(), name="continue_forgot_password"),
-    path("delete_user_with_email/<email>/", DeleteUserWithEmail.as_view(), name="delete_user"),
     path("complete_password_reset/", CompletePasswordReset.as_view(), name="complete_password_reset"),
+    path("delete_user_with_email/<email>/", DeleteUserWithEmail.as_view(), name="delete_user"),
     path("activate_account/<token>/<uidb64>/",  ActivateUserEmail.as_view(), name="activateUserAccount"),
     path("update_user_basic_informations/", UpdateUserBasicInformation.as_view(), name="update_user_basic_informations"),
     path("update_profile_image/", UpdateProfileImage.as_view(), name="update_profile_image"),
