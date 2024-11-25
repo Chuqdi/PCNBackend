@@ -82,7 +82,7 @@ def handleReferalCreditting(instance:User):
 
 def userSubscriptionNotification(user:User):
     title="Subscription was successful"
-    body="Your subscription has was successful"
+    body=f"Your {user.subscription.name} purchase was successful"
     
     
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
@@ -256,3 +256,26 @@ class CreateSubscriptionIntent(APIView):
                 "error": str(e)
             }, status=400)
        
+
+
+
+
+
+class CancelSubscription(APIView):
+    def put(self, request):
+        user = request.user
+        user.subscription =None
+        user.walletCount = 0
+        user.save()
+        
+        
+        message = render_to_string("emails/message.html", { "name":user.full_name,"message":"Subscription cancelled successfully"})
+        t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+        t.start()
+        
+        
+        return ResponseGenerator.response(
+            data=SignUpSerializer(user).data,
+            status=status.HTTP_200_OK,
+            message="User subscription cancelled successfully"
+        )
