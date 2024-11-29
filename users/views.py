@@ -171,20 +171,8 @@ class RegisterUserView(APIView):
                     message="User with this email already exists",
                 status=status.HTTP_400_BAD_REQUEST
             )
-        phone_number = request.data.get("phone_number", "")
-        if not phone_number or len(phone_number) < 3:
-            return ResponseGenerator.response(
-                data={},
-                    message="Phone number not valid",
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        if User.objects.filter(phone_number = phone_number).exists():
-            return ResponseGenerator.response(
-                data={},
-                    message="User with this phone already exists",
-                status=status.HTTP_400_BAD_REQUEST
-            )
+
+
 
         if s.is_valid():
             s.save()
@@ -377,8 +365,9 @@ class ForgotPasswordRequest(APIView):
         
 
         c = generateUserOTP(user[0].email)
-        message = render_to_string("emails/message.html", { "message":c, "name":f"{user[0].full_name}"})
-        t = threading.Thread(target=send_email, args=("Verification process", message,[email]))
+        emailMessage =f"We received a request to reset the password for your account associated with this email address. If you didn't request a password reset, please ignore this email. To reset your password, please use the code below \n\n {c} "
+        message = render_to_string("emails/message.html", { "message":emailMessage, "name":f"{user[0].full_name}"})
+        t = threading.Thread(target=send_email, args=("Your Password reset", message,[email]))
         t.start()
         
 

@@ -48,9 +48,9 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = models.CharField(null=True, blank=True,max_length=150)
     full_name = models.CharField(null=True, blank=True,max_length=150)
-    phone_number =models.CharField(unique=True,null=False, blank=False,max_length=150)
+    # phone_number =models.CharField(unique=True,null=False, blank=False,max_length=150)
     email  = models.EmailField(blank=False, null=False, unique=True,max_length=200, db_index=True)
-    home_address = models.TextField(blank=True, null=True)
+    # home_address = models.TextField(blank=True, null=True)
     stripe_id = models.TextField()
     subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
     is_new = models.BooleanField(default=True)

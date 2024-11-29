@@ -2,14 +2,22 @@
 <tr width="100%">
   <td style="padding: 20px">
     <p class="text">Hello {{ name }}</p>
-    <h3 class="text" style="font-size: 20px; font-weight: bolder">
-      We are processing your ticket payment
-    </h3>
+
     <p class="text">
-      We have received your ticket and are currently processing it. We aim to
-      settle the PCN within 5 working days, subject to our terms and conditions.
-      Please find the details below:
+        We are not able to process the ticket you uploaded.
     </p>
+
+    <div>
+        <p class="text">This could be because of any of the reasons below</p>
+        <p class="text">1. Ticket must not be uploaded more than 2 days from the date of issue.</p>
+        <p class="text">2. Reg number of the ticket you uploaded is not covered by your plan.</p>
+        <p class="text">
+          3. Penalty charges resulting from criminal violations (e.g., reckless driving, driving under the influence)
+        </p>
+      </div>
+      <p>For more information, please refer to our terms and conditions.</p>
+
+
     <div style="background: #e6fef2; padding: 20px; border-radius: 8px">
       <div>
         <p class="smallText">Parking Charge Number</p>

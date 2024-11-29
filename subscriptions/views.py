@@ -81,8 +81,8 @@ def handleReferalCreditting(instance:User):
                 print(e)
 
 def userSubscriptionNotification(user:User):
-    title="Subscription was successful"
-    body=f"Your {user.subscription.name} purchase was successful"
+    title="Your cover purchase was successful"
+    body=f"Your {user.subscription.name} purchase was successful. You are covered and you can upload your first ticket 13 days from now. For more information on ticket allowances please visit our terms and conditions."
     
     
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
