@@ -58,6 +58,7 @@ class User(AbstractUser):
     vehicle_count = models.IntegerField(default=0)
     pcn_count = models.IntegerField(default=0)
     walletCount = models.IntegerField(default=0)
+    date_for_next_pcn_upload = models.DateField(null=True, blank=True)
     referalCode = models.CharField(max_length=100, null=True, blank=True)
     refered_by_code = models.CharField(max_length=100, null=True, blank=True)
     isReferalUsed = models.BooleanField(default=False)

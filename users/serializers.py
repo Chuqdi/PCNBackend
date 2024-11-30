@@ -46,6 +46,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "is_superuser",
             "profile_image",
             # "home_address",
+            "date_for_next_pcn_upload",
             "is_staff",
             "subscription",
             "vehicle_count",

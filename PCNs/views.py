@@ -4,6 +4,8 @@ from users.serializers import SignUpSerializer
 from utils.ResponseGenerator import ResponseGenerator
 from vehicles.models import Vehicle
 from .models import PCN
+from datetime import timedelta
+from django.utils.timezone import now
 from .serializers import PCNSerializer
 
 
@@ -35,6 +37,7 @@ class CreateGetPCN(APIView):
         )
         user.pcn_count = user.pcn_count + 1
         user.walletCount = user.walletCount -int(amount)
+        user.date_for_next_pcn_upload = now().date() + timedelta(days=30)
         user.save()
         
         

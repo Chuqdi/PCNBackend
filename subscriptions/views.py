@@ -14,6 +14,8 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from users.models import DeviceToken, User
 import json
+from datetime import timedelta
+from django.utils.timezone import now
 from django.template.loader import render_to_string
 from utils.tasks import  send_email
 from firebase_admin import messaging
@@ -206,6 +208,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.vehicle_count = 0
         user.pcn_count = 0
         user.walletCount = walletCount
+        user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
         user.save()
         
         
