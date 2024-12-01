@@ -182,8 +182,8 @@ EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-DEFAULT_FROM_EMAIL = "Jobofa<admin@jobofa.com>"
-EMAIL_HOST_USER = "admin@jobofa.com"
+DEFAULT_FROM_EMAIL = "usepcn<support@usepcn.com>"
+EMAIL_HOST_USER = "support@usepcn.com"
 EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"
 
 
