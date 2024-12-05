@@ -88,12 +88,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
+
+# postgresql://pcn_user:/pcn
 DATABASES = {
-    'default': {
+'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': "pcn", 
+    'USER': "pcn_user",
+    'PASSWORD':"mhiWylYlRG6Lj1JtejcuKinePKkKBgdW",
+    'HOST':"mhiWylYlRG6Lj1JtejcuKinePKkKBgdW@dpg-ct8rr223esus7385o1v0-a.oregon-postgres.render.com", 
+    'PORT': "5432",
+},
+ 'default1': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 
 # Password validation
