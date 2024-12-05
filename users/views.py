@@ -196,7 +196,7 @@ class RegisterUserView(APIView):
             return ResponseGenerator.response(data=responseData, message="User  registered successfully", status=status.HTTP_201_CREATED)
   
             
-
+        print(s.errors)
         return ResponseGenerator.response(message= s.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
