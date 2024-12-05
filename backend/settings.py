@@ -90,7 +90,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 
-# postgresql://pcn_user:/pcn
 DATABASES = {
 'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -168,9 +167,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 AUTH_USER_MODEL = "users.User"
-STRIPE_SECRET_KEY ="sk_test_51NuLgnA3T5bTc4ZwW0aZ1bDOtqg7ciR0CfKfTnRqJBBiy3aPiXChQNPt596pD8Ybj4qpB8MFxFawzDI2Rr5y536F00zbCPnjce"
+# STRIPE_SECRET_KEY ="sk_test_51NuLgnA3T5bTc4ZwW0aZ1bDOtqg7ciR0CfKfTnRqJBBiy3aPiXChQNPt596pD8Ybj4qpB8MFxFawzDI2Rr5y536F00zbCPnjce"
 
-
+STRIPE_SECRET_KEY ="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"
 
 
 
