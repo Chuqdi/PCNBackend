@@ -9,6 +9,7 @@ from utils.ResponseGenerator import ResponseGenerator
 from users.serializers import SignUpSerializer
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import permissions
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
@@ -235,7 +236,20 @@ class UpgradeUserSubscriptionPlan(APIView):
             message="User subscription updated successfully"
         )
 
+class GetDiscountCodePercentOff(APIView):
+    def get(self, request, discountCode):
+        percent_off = 0
+        if discountCode and len(discountCode) > 1:
+            promotion_codes = stripe.PromotionCode.list(
+                code=discountCode  
+            )
+            if promotion_codes.data:
+                promotion_code = promotion_codes.data[0]
+                percent_off = promotion_code.coupon.percent_off
 
+        
+        return ResponseGenerator.response(data=percent_off, status=status.HTTP_200_OK)
+        
 
 class CreateSubscriptionIntent(APIView):
     def post(self,request):
@@ -244,7 +258,6 @@ class CreateSubscriptionIntent(APIView):
         discountCode = request.data.get("discountCode")
         customer = stripe.Customer.retrieve(user.stripe_id)
         try:
-            print(discountCode)
             if discountCode and len(discountCode) > 1:
                 promotion_codes = stripe.PromotionCode.list(
                     code=discountCode  

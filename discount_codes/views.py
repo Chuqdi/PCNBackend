@@ -5,10 +5,32 @@ from django.conf import settings
 from django.http import JsonResponse
 from discount_codes.models import DiscountCode
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from utils.ResponseGenerator import ResponseGenerator
 
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+
+
+class GetDiscountCodePercentOff(APIView):
+    def get(self, request, ):
+        discountCode = request.GET.get('code')
+        percent_off = 0
+        if discountCode and len(discountCode) > 1:
+            promotion_codes = stripe.PromotionCode.list(
+                code=discountCode  
+            )
+            if promotion_codes.data:
+                promotion_code = promotion_codes.data[0]
+                percent_off = promotion_code.coupon.percent_off
+
+        
+        return ResponseGenerator.response(data=percent_off, status=status.HTTP_200_OK, message="Discount retrieved")
+        
+
 
 
 @csrf_exempt
