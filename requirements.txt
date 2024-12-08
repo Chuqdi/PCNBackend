@@ -92,3 +92,4 @@ wcwidth==0.2.13
 whitenoise==6.7.0
 zope.interface==6.4.post2
 ecdsa
+dj-database-url
