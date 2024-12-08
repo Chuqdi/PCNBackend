@@ -241,20 +241,40 @@ class CreateSubscriptionIntent(APIView):
     def post(self,request):
         amount = request.data.get('amount')
         user = request.user
+        discountCode = request.data.get("discountCode")
         customer = stripe.Customer.retrieve(user.stripe_id)
         try:
-            payment_intent = stripe.PaymentIntent.create(
-                amount=int(amount *  100), 
-                currency="gbp",  
-                metadata={"integration_check": "subscription_payment"},  
-                payment_method_types=["card"],  
-                customer=customer
-            )
-            return ResponseGenerator.response(data=payment_intent, status=status.HTTP_201_CREATED, message="Intent created successfully")
+            print(discountCode)
+            if discountCode and len(discountCode) > 1:
+                promotion_codes = stripe.PromotionCode.list(
+                    code=discountCode  
+                )
+                if promotion_codes.data:
+                    promotion_code = promotion_codes.data[0]
+                    percent_off = promotion_code.coupon.percent_off
+                    amount = amount - (percent_off/100 *amount)
+                payment_intent = stripe.PaymentIntent.create(
+                    amount=int(amount *  100), 
+                    currency="gbp",  
+                    metadata={"integration_check": "subscription_payment"},  
+                    payment_method_types=["card"],  
+                    customer=customer,
+                )
+            else:
+                payment_intent = stripe.PaymentIntent.create(
+                    amount=int(amount *  100), 
+                    currency="gbp",  
+                    metadata={"integration_check": "subscription_payment"},  
+                    payment_method_types=["card"],  
+                    customer=customer,
+                )
+                
+            return ResponseGenerator.response(data={"payment_intent":payment_intent,"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
         
         
         
         except stripe.error.StripeError as e:
+            print(e)
             return JsonResponse({
                 "error": str(e)
             }, status=400)

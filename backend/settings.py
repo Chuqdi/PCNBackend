@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     "users",
     "PCNs",
     "vehicles",
-    "subscriptions"
+    "subscriptions",
+    "discount_codes"
 ]
 
 MIDDLEWARE = [
