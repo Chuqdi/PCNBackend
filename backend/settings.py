@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 DATABASES = {
-'default': {
+'default1': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': "pcn", 
     'USER': "pcn_user",
@@ -100,7 +100,7 @@ DATABASES = {
     'HOST':"mhiWylYlRG6Lj1JtejcuKinePKkKBgdW@dpg-ct8rr223esus7385o1v0-a.oregon-postgres.render.com", 
     'PORT': "5432",
 },
- 'default1': {
+ 'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
