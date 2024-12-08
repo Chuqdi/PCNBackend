@@ -97,7 +97,7 @@ DATABASES = {
     'NAME': "pcn", 
     'USER': "pcn_user",
     'PASSWORD':"mhiWylYlRG6Lj1JtejcuKinePKkKBgdW",
-    'HOST':"mhiWylYlRG6Lj1JtejcuKinePKkKBgdW@dpg-ct8rr223esus7385o1v0-a.oregon-postgres.render.com", 
+    'HOST':"dpg-ct8rr223esus7385o1v0-a.oregon-postgres.render.com", 
     'PORT': "5432",
 },
  'default1': {
