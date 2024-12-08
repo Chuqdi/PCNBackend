@@ -236,21 +236,6 @@ class UpgradeUserSubscriptionPlan(APIView):
             message="User subscription updated successfully"
         )
 
-class GetDiscountCodePercentOff(APIView):
-    def get(self, request, discountCode):
-        percent_off = 0
-        if discountCode and len(discountCode) > 1:
-            promotion_codes = stripe.PromotionCode.list(
-                code=discountCode  
-            )
-            if promotion_codes.data:
-                promotion_code = promotion_codes.data[0]
-                percent_off = promotion_code.coupon.percent_off
-
-        
-        return ResponseGenerator.response(data=percent_off, status=status.HTTP_200_OK)
-        
-
 class CreateSubscriptionIntent(APIView):
     def post(self,request):
         amount = request.data.get('amount')
