@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     "PCNs",
     "vehicles",
     "subscriptions",
-    "discount_codes"
+    "discount_codes",
+    "subscription_email"
 ]
 
 MIDDLEWARE = [
@@ -208,7 +209,7 @@ EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-DEFAULT_FROM_EMAIL = "usepcn<support@usepcn.com>"
+DEFAULT_FROM_EMAIL = "PCNTicket<support@usepcn.com>"
 EMAIL_HOST_USER = "support@usepcn.com"
 EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"
 

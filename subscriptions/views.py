@@ -26,7 +26,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def handleReferalCreditting(instance:User):
         if not instance.isReferalUsed and instance.refered_by_code:
-            print("started")
             referalTitle="Referal bonus"
             referalMessage = "You have received a £5 referal bonus"
             refered_by = User.objects.get(referalCode = instance.refered_by_code)
@@ -85,7 +84,9 @@ def handleReferalCreditting(instance:User):
 
 def userSubscriptionNotification(user:User):
     title="Your cover purchase was successful"
-    body=f"Your {user.subscription.name} purchase was successful. You are covered and you can upload your first ticket 13 days from now. For more information on ticket allowances please visit our terms and conditions."
+    body=f"""Your {user.subscription.name} purchase was successful. <br /><br />
+    You are covered and you can upload your first ticket 13 days from now. <br /><br />
+    For more information on ticket allowances please visit our <a href='https://www.usepcn.com/terms-and-conditions'>terms and conditions.</a>"""
     
     
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
