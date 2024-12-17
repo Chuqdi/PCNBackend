@@ -288,6 +288,7 @@ class UserMe(APIView):
         )
 
 class DeleteUserWithEmail(APIView):
+    permission_classes=[permissions.AllowAny]
     def delete(self, request, email):
         try:
             user = User.objects.get(email=email)
