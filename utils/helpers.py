@@ -13,8 +13,74 @@ from django.conf import settings
 import requests
 from datetime import datetime
 from django.conf import settings
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+
+
+def createVirtualCard(user:User, amount:int):
+    first_name = user.full_name.split(' ')[0]
+    last_name = user.full_name.split(' ')[1]
+    cardholder = stripe.issuing.Cardholder.create(
+        name=user.full_name,
+        email=user.email,
+        phone_number="+18008675309",
+        status="active",
+        type="individual",
+        individual={
+            "first_name": first_name,
+            "last_name": last_name,
+            "dob": {"day": 1, "month": 11, "year": 1981},
+        },
+        billing={
+            "address": {
+            "line1": "123 Main Street",
+            "city": "San Francisco",
+            "state": "CA",
+            "postal_code": "94111",
+            "country": "GB",
+            },
+        },
+        )
+        
+        
+    card = stripe.issuing.Card.create(
+            cardholder=cardholder.id,
+            currency="gbp",
+            type="virtual",
+            # pin="1245",
+            # authorization_controls={
+            #      "blocked_categories": ["veterinary_services"],
+            # },
+            spending_controls={
+                "allowed_categories":["general_services"],
+                # "blocked_categories": ["veterinary_services"],
+                 "spending_limits": [{
+                     "amount":1000,
+                     "categories":["general_services"],
+                     "interval":"monthly",
+                     }],
+            },
+            
+            
+          
+        )
+        
+        
+    card = stripe.issuing.Card.modify(
+    card.id,
+    status="active",
+    # funding="debit", 
+    )
+    
+
+    
+    return {
+        "card_id":card.id,
+        "card_holder_id":cardholder.id
+    }
+    
 
 
 def validate_ios_receipt(receipt_data):

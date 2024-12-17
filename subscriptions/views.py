@@ -8,8 +8,6 @@ from subscriptions.models import Subscription
 from utils.ResponseGenerator import ResponseGenerator
 from users.serializers import SignUpSerializer
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework import permissions
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
@@ -301,3 +299,11 @@ class CancelSubscription(APIView):
             status=status.HTTP_200_OK,
             message="User subscription cancelled successfully"
         )
+        
+        
+
+
+
+        
+        
+        

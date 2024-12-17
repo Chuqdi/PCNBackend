@@ -22,3 +22,7 @@ class Subscription(models.Model):
     date_subscripted = models.DateTimeField(default=timezone.now)
     
     
+  
+  
+
+    
