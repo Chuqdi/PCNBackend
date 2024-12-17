@@ -175,6 +175,8 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+
 AUTH_USER_MODEL = "users.User"
 STRIPE_SECRET_KEY ="sk_test_51NuLgnA3T5bTc4ZwW0aZ1bDOtqg7ciR0CfKfTnRqJBBiy3aPiXChQNPt596pD8Ybj4qpB8MFxFawzDI2Rr5y536F00zbCPnjce"
 
