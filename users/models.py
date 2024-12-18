@@ -62,6 +62,7 @@ class User(AbstractUser):
     referalCode = models.CharField(max_length=100, null=True, blank=True)
     refered_by_code = models.CharField(max_length=100, null=True, blank=True)
     isReferalUsed = models.BooleanField(default=False)
+    isSubbedBefore = models.BooleanField(default=False)
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
 
     USERNAME_FIELD = 'email'

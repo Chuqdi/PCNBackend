@@ -21,6 +21,6 @@ def create_profile(sender, instance, created, **kwargs):
         Message<br />
         {instance.message}
         """})
-        t = threading.Thread(target=send_email, args=(f"Contact Message", message,[settings.EMAIL_HOST_USER,"usepcn.com@gmail.com"]))
+        t = threading.Thread(target=send_email, args=(f"Contact Message", message,[settings.EMAIL_HOST_USER,"admin@usepcn.com"]))
         t.start()
         

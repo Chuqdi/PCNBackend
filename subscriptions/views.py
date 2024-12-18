@@ -199,12 +199,14 @@ class UpgradeUserSubscriptionPlan(APIView):
         walletCount = request.data.get("walletCount")
         period = request.data.get("period")
         is_one_off = request.data.get("isOneOff")
+        
         subscription = Subscription.objects.create(
             name=name,
             period=period,
         )
         user = request.user
         user.subscription = subscription
+        user.isSubbedBefore = True
         user.vehicle_count = 0
         user.pcn_count = 0
         user.walletCount = walletCount
