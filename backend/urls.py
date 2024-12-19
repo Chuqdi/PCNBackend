@@ -19,10 +19,9 @@ def test(request):
             title="djdjd",
             body="dfkdk",
         ),
-        token="d2u_tcdNRE4Tt7arPYN5dn:APA91bEBbXEDjdaIue5rMPfY8OfMG4fJkXb6hCVhiXpTPkG8sI_XJYhhgrxe6gXoJAaYADcPlm0vV6vcnCH3Pm8gUZA4SvVgijD7X_whrBv3A9c1N0Y2DzY",
+        token="c9kwrwC9SU5jsrL_CDe7ga:APA91bGb54sKz5qv_DttBx4O55TZIwTxm3BdLedl0tXKRy8FuBd5mTrWXH9TtGuo_IetrTFqJyHCxv714V-GPwa-72SmYDI101hdRyJ6h58OM4vV75bGkTY",
     )
         messaging.send(n_message)
-        print("sent")
     except Exception as e:
         print(e)
     return render(request, "emails/message.html", {"name":"Hezekiah", "message":"dkdk"})

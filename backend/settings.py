@@ -226,7 +226,7 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 
-cred = credentials.Certificate(BASE_DIR.joinpath("pcnticket-de55b-firebase-adminsdk-2trso-32e5f2b13e.json"))
+cred = credentials.Certificate(BASE_DIR.joinpath("pcnticket-de55b-firebase-adminsdk-2trso-770617c29b.json"))
 firebase_admin.initialize_app(cred)
 
 
