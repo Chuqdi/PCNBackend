@@ -266,6 +266,7 @@ class CreateSubscriptionIntent(APIView):
         success_url = f'https://www.usepcn.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}'
         
         if discountCode and len(discountCode) > 1:
+            print("Here")
             session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
@@ -273,7 +274,9 @@ class CreateSubscriptionIntent(APIView):
                 customer=user.stripe_id,
                 success_url=success_url,
                 cancel_url='https://www.usepcn.com/?payment_cancelled=1',
-                discounts=discountCode
+                discounts=[{
+                    "coupon":discountCode
+                }]
             )
         else:
             session = stripe.checkout.Session.create(
