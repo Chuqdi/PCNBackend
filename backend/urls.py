@@ -4,27 +4,28 @@ from django.urls import path, include
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from utils.tasks import  send_email
-
+from firebase_admin import messaging
+ 
 
 
 def test(request):
-    title="Your cover purchase was successful"
-    body=f"""Your BASIC purchase was successful. <br /><br />
-    You are covered and you can upload your first ticket 13 days from now. <br /><br />
-    For more information on ticket allowances please visit our <a href='https://www.usepcn.com/terms-and-conditions'>terms and conditions.</a>"""
+    ## eukwKrvY40JtlQuPFHcQjI:APA91bFYGg6i0VbMljAOGBOD7AGj9y-2h6EDBc97wKKpd9rqbqyJRgxTNa52l53SYXr-xbiVJCQFVKFXdSkFgBEVTFcKGSkxEdKO354KRPtxibmgwh5ogIM
     
     
-    message = render_to_string("emails/message.html", { "name":"Hezekiah","message":body})
     try:
-        send_email(
-            message=message,
-            recipient_list=["morganhezekiah111@gmail.com"],
-            subject=title,
-            
-        )
+
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title="djdjd",
+            body="dfkdk",
+        ),
+        token="d2u_tcdNRE4Tt7arPYN5dn:APA91bEBbXEDjdaIue5rMPfY8OfMG4fJkXb6hCVhiXpTPkG8sI_XJYhhgrxe6gXoJAaYADcPlm0vV6vcnCH3Pm8gUZA4SvVgijD7X_whrBv3A9c1N0Y2DzY",
+    )
+        messaging.send(n_message)
+        print("sent")
     except Exception as e:
-        print(f"Error sending email: {e}")
-    return render(request, "emails/message.html", {"name":"Hezekiah", "message":body})
+        print(e)
+    return render(request, "emails/message.html", {"name":"Hezekiah", "message":"dkdk"})
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),

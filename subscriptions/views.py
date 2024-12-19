@@ -274,7 +274,7 @@ class CreateSubscriptionIntent(APIView):
                 success_url=success_url,
                 cancel_url='https://www.usepcn.com/?payment_cancelled=1',
                 discounts=[{
-                    "coupon":discountCode
+                    "coupon":discountCode,
                 }]
             )
         else:
