@@ -242,42 +242,53 @@ class CreateSubscriptionIntent(APIView):
         amount = request.data.get('amount')
         user = request.user
         discountCode = request.data.get("discountCode")
-        customer = stripe.Customer.retrieve(user.stripe_id)
-        try:
-            if discountCode and len(discountCode) > 1:
-                promotion_codes = stripe.PromotionCode.list(
-                    code=discountCode  
-                )
-                if promotion_codes.data:
-                    promotion_code = promotion_codes.data[0]
-                    percent_off = promotion_code.coupon.percent_off
-                    amount = amount - (percent_off/100 *amount)
-                payment_intent = stripe.PaymentIntent.create(
-                    amount=int(amount *  100), 
-                    currency="gbp",  
-                    metadata={"integration_check": "subscription_payment"},  
-                    payment_method_types=["card"],  
-                    customer=customer,
-                )
-            else:
-                payment_intent = stripe.PaymentIntent.create(
-                    amount=int(amount *  100), 
-                    currency="gbp",  
-                    metadata={"integration_check": "subscription_payment"},  
-                    payment_method_types=["card"],  
-                    customer=customer,
-                )
-                
-            return ResponseGenerator.response(data={"payment_intent":payment_intent,"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
+        priceId = request.data.get('priceId')
+        name = request.data.get('name')
+        walletCount = request.data.get('walletCount')
+        peroid = request.data.get('peroid')
+        joiningFee = request.data.get('joiningFee')
+        isOneOff= request.data.get("isOneOff")
         
         
+        line_items =[
+                {
+                   "price":priceId,
+                    "quantity":1
+        }]
         
-        except stripe.error.StripeError as e:
-            print(e)
-            return JsonResponse({
-                "error": str(e)
-            }, status=400)
        
+        if not user.isSubbedBefore:
+            line_items.append({
+                "price":joiningFee,
+                'quantity': 1,
+            })
+
+        success_url = f'https://www.usepcn.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}'
+        
+        if discountCode and len(discountCode) > 1:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='subscription',
+                customer=user.stripe_id,
+                success_url=success_url,
+                cancel_url='https://www.usepcn.com/?payment_cancelled=1',
+                discounts=discountCode
+            )
+        else:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='subscription',
+                customer=user.stripe_id,
+                success_url=success_url,
+                cancel_url='https://www.usepcn.com/?payment_cancelled=1',
+            )
+        return ResponseGenerator.response(data={"payment_intent":session.get("id"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
+        
+        
+        
+    
 
 
 
