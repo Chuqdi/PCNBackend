@@ -94,3 +94,4 @@ zope.interface==6.4.post2
 ecdsa
 dj-database-url
 django-environ
+python-dotenv
