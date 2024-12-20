@@ -23,9 +23,12 @@ class GetDiscountCodePercentOff(APIView):
             promotion_codes = stripe.PromotionCode.list(
                 code=discountCode  
             )
-            if promotion_codes.data:
-                promotion_code = promotion_codes.data[0]
-                percent_off = promotion_code.coupon.percent_off
+            coupons = stripe.Coupon.list()
+            print(coupons)
+            if coupons.data:
+                promotion_code = coupons.data[0]
+                percent_off = promotion_code.percent_off
+                print(percent_off)
 
         
         return ResponseGenerator.response(data=percent_off, status=status.HTTP_200_OK, message="Discount retrieved")
@@ -90,8 +93,6 @@ class CreateDiscountCodeView(APIView):
             coupon=coupon.id,
             code=instance.code,  
             )
-            print(promo)
-            print("completd")
             
         except stripe.error.StripeError as e:
             print(e)
