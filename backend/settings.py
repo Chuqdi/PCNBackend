@@ -9,10 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import environ
-env = environ.Env()
-environ.Env.read_env()
-
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 import firebase_admin
@@ -20,6 +17,8 @@ from firebase_admin import credentials
 import dj_database_url
 
 
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -101,7 +100,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://pcn_user:mhiWylYlRG6Lj1JtejcuKinePKkKBgdW@dpg-ct8rr223esus7385o1v0-a.oregon-postgres.render.com/pcn",
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
         conn_health_checks=True,
     )
@@ -180,7 +179,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = "users.User"
 # STRIPE_SECRET_KEY ="sk_test_51NNZ6uEaYyTuzzYV1M0nLvkxHLyEGR1d91FcfcmLZ0LVZNuTkm43ergE8ryGniufmRS4jmT1U9cM1jhK8pFucFmI00vew8ccdG"
 
-STRIPE_SECRET_KEY ="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"
+STRIPE_SECRET_KEY =os.getenv("STRIPE_SECRET_KEY")
 
 
 
@@ -204,18 +203,18 @@ EMAIL_HOST = "smtp.mailgun.org"
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
-DEFAULT_FROM_EMAIL = "PCNTicket<support@usepcn.com>"
-EMAIL_HOST_USER = "support@usepcn.com"
-EMAIL_HOST_PASSWORD ="gODFATHERTINZ1@"
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 
 
 # AWS CONFIGURATIONS
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_ACCESS_KEY_ID = "AKIAQXZDR553VZ447CO4"
-AWS_SECRET_ACCESS_KEY = "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"
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY =os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_DEFAULT_ACL = None
-AWS_STORAGE_BUCKET_NAME = "pcnticket1"
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
@@ -226,8 +225,21 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 
-cred = credentials.Certificate(BASE_DIR.joinpath("pcnticket-de55b-firebase-adminsdk-2trso-770617c29b.json"))
-firebase_admin.initialize_app(cred)
+firebase_creds = credentials.Certificate({
+    "type": os.getenv("FIREBASE_TYPE"),
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "client_id":os.getenv("FIREBASE_CLIENT_ID"),
+    "auth_uri":os.getenv("FIREBASE_AUTH_URI"),
+    "token_uri":os.getenv("FIREBASE_TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("FIREBASE_AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_X509_CERT_URL"),
+    "universe_domain": os.getenv("FIREBASE_UNIVERSE_DOMAIN"),
+})
+
+firebase_admin.initialize_app(firebase_creds)
 
 
 REFERAL_CREDIT_AMOUNT = 5
