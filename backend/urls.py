@@ -12,19 +12,23 @@ def test(request):
     ## eukwKrvY40JtlQuPFHcQjI:APA91bFYGg6i0VbMljAOGBOD7AGj9y-2h6EDBc97wKKpd9rqbqyJRgxTNa52l53SYXr-xbiVJCQFVKFXdSkFgBEVTFcKGSkxEdKO354KRPtxibmgwh5ogIM
     
     
-    try:
+    # try:
 
-        n_message = messaging.Message(
-        notification=messaging.Notification(
-            title="djdjd",
-            body="dfkdk",
-        ),
-        token="c9kwrwC9SU5jsrL_CDe7ga:APA91bGb54sKz5qv_DttBx4O55TZIwTxm3BdLedl0tXKRy8FuBd5mTrWXH9TtGuo_IetrTFqJyHCxv714V-GPwa-72SmYDI101hdRyJ6h58OM4vV75bGkTY",
-    )
-        messaging.send(n_message)
-    except Exception as e:
-        print(e)
-    return render(request, "emails/message.html", {"name":"Hezekiah", "message":"dkdk"})
+    #     n_message = messaging.Message(
+    #     notification=messaging.Notification(
+    #         title="djdjd",
+    #         body="dfkdk",
+    #     ),
+    #     token="c9kwrwC9SU5jsrL_CDe7ga:APA91bGb54sKz5qv_DttBx4O55TZIwTxm3BdLedl0tXKRy8FuBd5mTrWXH9TtGuo_IetrTFqJyHCxv714V-GPwa-72SmYDI101hdRyJ6h58OM4vV75bGkTY",
+    # )
+    #     messaging.send(n_message)
+    # except Exception as e:
+    #     print(e)
+    return render(request, "emails/message.html", {"name":"Hezekiah",
+                                                   "message":"""
+                                                   Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
+                                                   """
+        ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),

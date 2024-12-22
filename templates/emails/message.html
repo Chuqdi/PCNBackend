@@ -3,10 +3,18 @@
   <td style="padding: 20px">
     <p class="text">Hi {{ name }},</p>
 
-    <p class="text" style="background: #e6fef2;padding: 20px; border-radius: 8px;">
+    <p class="text" style="background:{% if btnTitle %}#fff{%else%}#e6fef2{%endif%};padding: 10px; border-radius: 8px;">
       {{ message|safe }}
     </p>
   </td>
 </tr>
+
+{% if btnTitle   %}
+<tr width="100%">
+  <td style="width:100%; text-align:center;">
+    <a style="height:56px; padding: 16px 30px;background: #000;border-radius: 12px;box-shadow: 0px 8px 24px 0px rgba(114, 190, 102, 0.20); color:white;text-decoration:none;" href="{{btnLink}}">{{ btnTitle }}</a>
+  </td>
+</tr>
+{% endif %}
 
 {%include "emails/helpers/footer.html" %}
