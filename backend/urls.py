@@ -11,12 +11,18 @@ from firebase_admin import messaging
 
 def test(request):
     try:
-        user = User.objects.get(email="morganhezekiah111@gmail.com")
+        user =User.objects.get(email="morganhezekiah111@gmail.com")
         user_token = DeviceToken.objects.get(user = user)
-        print(user_token.token)
         n_message = messaging.Message(
         notification=messaging.Notification(
-            title="title",
+            title={
+                 "title": "title",
+                    "message": "message",
+                    "expired_data":"expired_data",
+                    "screen":"screen",
+                    "is_notification": True
+                
+                },
             body="message",
             
         ),
