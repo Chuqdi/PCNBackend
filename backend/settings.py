@@ -185,8 +185,7 @@ STRIPE_SECRET_KEY =os.getenv("STRIPE_SECRET_KEY")
 
 
 
-# CELERY_BROKER_URL = "rediss://default:AVNS_kobLCmjKB15OTYSSnpr@db-redis-nyc3-24025-do-user-16518620-0.c.db.ondigitalocean.com:25061"
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = os.getenv("REDIS_URL")
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
 CELERY_RESULT_SERIALIZER = 'pickle'
