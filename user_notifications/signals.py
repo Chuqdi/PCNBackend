@@ -19,20 +19,23 @@ def create_profile(sender, instance, created, **kwargs):
         expired_data = instance.expired_data
         screen = instance.screen
         
+        data = {}
+        
+        if screen and len(screen) > 1:
+            data = {"screen":screen}
+        
+        if expired_data:
+            data = {"expired_data":expired_data}
+        
         
         try:
             user_token = DeviceToken.objects.get(user = instance.user)
             n_message = messaging.Message(
             notification=messaging.Notification(
-                title={
-                    "title": title,
-                    "message": message,
-                    "expired_data":expired_data,
-                    "screen":screen,
-                    "is_notification": True
-                    },
+                title=title,
                 body=message,
             ),
+            data=data,
             token=user_token.token.strip(),
         )
             messaging.send(n_message)

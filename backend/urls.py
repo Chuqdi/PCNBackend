@@ -16,16 +16,17 @@ def test(request):
         n_message = messaging.Message(
         notification=messaging.Notification(
             title="title",
-            body={
-                    "message": "message",
-                    "expired_data":"expired_data",
-                    "screen":"screen",
-                    "is_notification": True
-                
-                },
+            body="message",
+            
             
         ),
-        token=user_token.token.strip(),
+        token="c9kwrwC9SU5jsrL_CDe7ga:APA91bGb54sKz5qv_DttBx4O55TZIwTxm3BdLedl0tXKRy8FuBd5mTrWXH9TtGuo_IetrTFqJyHCxv714V-GPwa-72SmYDI101hdRyJ6h58OM4vV75bGkTY",
+        data={
+            "message": "message",
+            "expired_data":"expired_data",
+            "screen":"Referrals",
+            "is_notification": "1"
+        }
     )
         messaging.send(n_message)
         print("sent")
