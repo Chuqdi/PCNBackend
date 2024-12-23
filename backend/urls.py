@@ -3,13 +3,29 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from users.models import DeviceToken, User
 from utils.tasks import  test_async
 from firebase_admin import messaging
  
 
 
 def test(request):
-    test_async.delay()
+    try:
+        user = User.objects.get(email="morganhezekiah111@gmail.com")
+        user_token = DeviceToken.objects.get(user = user)
+        print(user_token.token)
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title="title",
+            body="message",
+            
+        ),
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+        print("sent")
+    except Exception as e:
+            print(e)
     
 
     return render(request, "emails/message.html", {"name":"Hezekiah",
@@ -27,4 +43,5 @@ urlpatterns = [
     path("discount_codes/", include("discount_codes.urls")),
     path("subscription_email/", include("subscription_email.urls")),
     path("virualcards/", include("virualcards.urls")),
+    path("user_notifications/", include("user_notifications.urls")),
 ]
