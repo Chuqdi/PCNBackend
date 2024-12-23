@@ -3,7 +3,7 @@ from users.models import User
 
 APP_SCREENS = [
         ("Home", 'Home'),
-        ("Tickets", 'Tickets'),
+        ("Ticket", 'Ticket'),
         ("Plans", 'Plans')
     ]
 
