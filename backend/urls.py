@@ -15,15 +15,14 @@ def test(request):
         user_token = DeviceToken.objects.get(user = user)
         n_message = messaging.Message(
         notification=messaging.Notification(
-            title={
-                 "title": "title",
+            title="title",
+            body={
                     "message": "message",
                     "expired_data":"expired_data",
                     "screen":"screen",
                     "is_notification": True
                 
                 },
-            body="message",
             
         ),
         token=user_token.token.strip(),
