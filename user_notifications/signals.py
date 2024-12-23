@@ -27,6 +27,8 @@ def create_profile(sender, instance, created, **kwargs):
         if expired_data:
             data = {"expired_data":expired_data}
         
+        print(data)
+        
         
         try:
             user_token = DeviceToken.objects.get(user = instance.user)

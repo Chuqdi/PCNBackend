@@ -2,9 +2,9 @@ from django.db import models
 from users.models import User
 
 APP_SCREENS = [
-        ("HOME", 'Home'),
-        ("TICKETS", 'Tickets'),
-        ("PLANS", 'Plans')
+        ("Home", 'Home'),
+        ("Tickets", 'Tickets'),
+        ("Plans", 'Plans')
     ]
 
 class Notification(models.Model):
