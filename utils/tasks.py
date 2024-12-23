@@ -10,6 +10,11 @@ from django.template.loader import render_to_string
 
 
 
+@shared_task
+def test_async(bind=True):
+    message = EmailMessage("subject", "message",  settings.DEFAULT_FROM_EMAIL,["morganhezekiah111@gmail.com"])
+    message.content_subtype = 'html' 
+    message.send()
 
 
 
