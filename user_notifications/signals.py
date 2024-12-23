@@ -16,7 +16,7 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         title = instance.title
         message = instance.message
-        expired_data = instance.expired_data
+        expired_data = instance.expire_date
         screen = instance.screen
         
         data = {}
