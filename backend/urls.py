@@ -4,7 +4,6 @@ from django.urls import path, include
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from users.models import DeviceToken, User
-from users.signals import create_perodic_task
 from utils.tasks import  test_async
 from firebase_admin import messaging
 from django_celery_beat.models import CrontabSchedule, PeriodicTask, IntervalSchedule
