@@ -12,21 +12,6 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask, IntervalSch
 
 
 def test(request):
-    crontab,created = CrontabSchedule.objects.get_or_create(
-        minute="52",
-        hour="10",
-        # day_of_month=24,
-        # month_of_year=12,
-        # day_of_week = 52
-        day_of_week='*',  # * means every day
-        day_of_month='*',
-        month_of_year='*'
-    )
-   
-    
-    create_perodic_task(task="send_user_second_subscription_message", crontab=crontab, arg=1)
-        
-    
     
 
     return render(request, "emails/message.html", {"name":"Hezekiah",
