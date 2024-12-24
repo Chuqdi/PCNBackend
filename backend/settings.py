@@ -185,14 +185,14 @@ STRIPE_SECRET_KEY =os.getenv("STRIPE_SECRET_KEY")
 
 
 
-
 CELERY_BROKER_URL = os.getenv("REDIS_URL")
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['pickle', 'application/json']
 CELERY_RESULT_SERIALIZER = 'pickle'
 CELERY_TASK_SELERLIZER = 'pickle'
 CELERY_ENABLE_UTC = True
-CELERY_TIMEZONE = 'UTC'
+# CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'Africa/Lagos'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_IMPORTS = ("utils",)
 

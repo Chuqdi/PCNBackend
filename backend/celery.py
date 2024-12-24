@@ -27,5 +27,15 @@ app.conf.beat_schedule = {
         'task': 'utils.tasks.send_user_fridays_subscription_message',
         'schedule': crontab(day_of_week=4, hour=9, minute=30),
     },
+    
+    
+    'send_user_first_subscription_message': {
+        'task': 'utils.tasks.send_user_first_subscription_message',
+        'schedule': crontab(day_of_week="*", hour=9, minute=30, day_of_month="*", month_of_year="*"),
+    },
+    'send_user_second_subscription_message': {
+        'task': 'utils.tasks.send_user_second_subscription_message',
+        'schedule': crontab(day_of_week="*", hour=17, minute=33, day_of_month="*", month_of_year="*"),
+    },
 
 }

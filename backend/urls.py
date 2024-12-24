@@ -4,34 +4,29 @@ from django.urls import path, include
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from users.models import DeviceToken, User
+from users.signals import create_perodic_task
 from utils.tasks import  test_async
 from firebase_admin import messaging
+from django_celery_beat.models import CrontabSchedule, PeriodicTask, IntervalSchedule
  
 
 
 def test(request):
-    try:
-        user =User.objects.get(email="morganhezekiah111@gmail.com")
-        user_token = DeviceToken.objects.get(user = user)
-        n_message = messaging.Message(
-        notification=messaging.Notification(
-            title="title",
-            body="message",
-            
-            
-        ),
-        token="c9kwrwC9SU5jsrL_CDe7ga:APA91bGb54sKz5qv_DttBx4O55TZIwTxm3BdLedl0tXKRy8FuBd5mTrWXH9TtGuo_IetrTFqJyHCxv714V-GPwa-72SmYDI101hdRyJ6h58OM4vV75bGkTY",
-        data={
-            "message": "message",
-            "expired_data":"expired_data",
-            "screen":"Referrals",
-            "is_notification": "1"
-        }
+    crontab,created = CrontabSchedule.objects.get_or_create(
+        minute="52",
+        hour="10",
+        # day_of_month=24,
+        # month_of_year=12,
+        # day_of_week = 52
+        day_of_week='*',  # * means every day
+        day_of_month='*',
+        month_of_year='*'
     )
-        messaging.send(n_message)
-        print("sent")
-    except Exception as e:
-            print(e)
+   
+    
+    create_perodic_task(task="send_user_second_subscription_message", crontab=crontab, arg=1)
+        
+    
     
 
     return render(request, "emails/message.html", {"name":"Hezekiah",

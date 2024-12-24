@@ -14,12 +14,14 @@ def create_perodic_task(task:str,crontab:CrontabSchedule,arg):
         PeriodicTask.objects.get(name=task_name).delete()
     except PeriodicTask.DoesNotExist:
         pass
-    PeriodicTask.objects.create(
+    task = PeriodicTask.objects.create(
         crontab=crontab,
         task= f'utils.tasks.{task}',
         name=task_name,
         args=json.dumps(arg)
     )
+    
+    print(task)
     
 
 @receiver(post_save, sender=User) 
@@ -41,15 +43,29 @@ def user_created(sender, instance, created, **kwargs):
         
         
         create_perodic_task(task="send_user_first_subscription_message", crontab=crontab, arg=instance.pk)
+        print("Week")
+        print(date_joined.isocalendar()[1])
+        print("Day of the month")
+        print(date_joined.day)
+        print("Month")
+        print(date_joined.month)
         
         
         ## SECOND MESSAGE
+        # crontab,created = CrontabSchedule.objects.get_or_create(
+        #     minute=7,
+        #     hour=time_to_send_first_message + 8,
+        #     day_of_month=date_joined.day,
+        #     month_of_year=date_joined.month,
+        #     day_of_week = date_joined.isocalendar()[1]
+        # )
+        
         crontab,created = CrontabSchedule.objects.get_or_create(
-            minute=7,
-            hour=time_to_send_first_message + 8,
-            day_of_month=date_joined.day,
-            month_of_year=date_joined.month,
-            day_of_week = date_joined.isocalendar()[1]
+            minute=46,
+            hour=9,
+            day_of_month=24,
+            month_of_year=12,
+            day_of_week = 52
         )
         
         create_perodic_task(task="send_user_second_subscription_message", crontab=crontab, arg=instance.pk)
