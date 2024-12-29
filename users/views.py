@@ -237,7 +237,6 @@ class LoginUserView(APIView):
 
     def post(self, request):
         user = User.objects.filter(email__iexact=request.data.get("email"))
-        print(user)
         isAdmin = request.data.get("isAdmin", False)
         if user.exists() and not user[0].is_active:
             return ResponseGenerator.response(
