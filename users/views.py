@@ -5,7 +5,7 @@ from users.serializers import (
     ReferalCodeSerializer,
     SignUpSerializer,
 )
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.conf import settings
 from django.db.models import Q
 from django.template.loader import render_to_string
@@ -237,6 +237,7 @@ class LoginUserView(APIView):
 
     def post(self, request):
         user = User.objects.filter(email__iexact=request.data.get("email"))
+        print(user)
         isAdmin = request.data.get("isAdmin", False)
         if user.exists() and not user[0].is_active:
             return ResponseGenerator.response(
@@ -244,9 +245,9 @@ class LoginUserView(APIView):
                 data={},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user = authenticate(
-            username=request.data.get("email"), password=request.data.get("password")
-        )
+        user = user[0]
+        checking_password = check_password(request.data.get("password"), user.password)
+
         if isAdmin and user and not user.is_superuser:
             return ResponseGenerator.response(
                     message="Sorry User is not admin",
@@ -256,7 +257,7 @@ class LoginUserView(APIView):
 
 
 
-        if user is not None:
+        if checking_password:
             return ResponseGenerator.response(
                 data={"data": SignUpSerializer(user).data, "token": user.auth_token.key},
                 message="User logged in successfully",

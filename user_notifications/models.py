@@ -4,7 +4,26 @@ from users.models import User
 APP_SCREENS = [
         ("Home", 'Home'),
         ("Ticket", 'Ticket'),
-        ("Plans", 'Plans')
+        ("Plans", 'Plans'),
+        ("welcome","welcome"),
+        ("register","register"),
+        ("dashboard","dashboard"),
+        ("login","login"),
+        ("forgotPassword","forgotPassword"),
+        ("EditProfile","EditProfile"),
+        ("ChangePassword","ChangePassword"),
+        ("PCNCreated","PCNCreated"),
+        ("Referrals","Referrals"),
+        ("PlanDetailsBreakdownSection","PlanDetailsBreakdownSection"),
+        ("PaymentSuccessful","PaymentSuccessful"),
+        ("PreDashboard","PreDashboard"),
+        ("Notifications","Notifications"),
+        ("Profile","Profile"),
+        ("PayAPCN","PayAPCN"),
+        ("Subscriptions","Subscriptions"),
+        ("AddVehicle","AddVehicle"),
+        ("ListVehicles","ListVehicles"),
+        
     ]
 
 USERS_SUBSCRIPTION_CATEGORY = [
