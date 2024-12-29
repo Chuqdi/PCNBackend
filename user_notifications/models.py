@@ -7,6 +7,14 @@ APP_SCREENS = [
         ("Plans", 'Plans')
     ]
 
+USERS_SUBSCRIPTION_CATEGORY = [
+        ("Basic", 'Basic'),
+        ("Premium", 'Premium'),
+        ("None", 'None')
+    ]
+
+
+
 class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.TextField()
@@ -17,10 +25,12 @@ class Notification(models.Model):
         blank=True
     )
     expire_date = models.DateField(null=True, blank=True)
-    user = models.ForeignKey(User, related_name="notifications", on_delete=models.CASCADE)
+    users_subscription_category = models.TextField(null=True, blank=True, choices=USERS_SUBSCRIPTION_CATEGORY,)
+    to_all_registered_users = models.BooleanField(default=False)
+    user = models.ForeignKey(User, related_name="notifications", on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
-        return self.user.email
+        return self.title
     
     
     class Meta:

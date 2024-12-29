@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from users.models import DeviceToken, User
 from utils.tasks import  test_async
 from firebase_admin import messaging
-from django_celery_beat.models import CrontabSchedule, PeriodicTask, IntervalSchedule
  
 
 

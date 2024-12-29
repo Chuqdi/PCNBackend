@@ -42,12 +42,10 @@ def send_user_first_subscription_message():
             title ="Notification"
             
             message = render_to_string("emails/message.html", {"name":user.full_name,
-                                                        "message":"""
-                                                        Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
-                                                        """
-                ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
-            
-            
+            "message":"""
+            Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
+            """
+            ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
             try:
                 send_email(
                     message=message,
@@ -73,11 +71,11 @@ def send_user_second_subscription_message():
             title ="Notification"
             
             message = render_to_string("emails/message.html", {"name":user.full_name,
-                                                        "message":"""
-                                                        Did you know the average parking fine doubles if left unpaid? Stay ahead with a PCN Cover. We’ll handle your fines quickly and help avoid late fees.
-                                                        <br />
-                                                        <p>🔒 <b>Secure your peace of mind today:</b></p>
-                                                        """
+            "message":"""
+            Did you know the average parking fine doubles if left unpaid? Stay ahead with a PCN Cover. We’ll handle your fines quickly and help avoid late fees.
+            <br />
+            <p>🔒 <b>Secure your peace of mind today:</b></p>
+            """
                 ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
             
             
@@ -131,12 +129,12 @@ def send_user_fridays_subscription_message(user_id):
             title ="Notification"
             
             message = render_to_string("emails/message.html", {"name":user.full_name,
-                                                        "message":"""
-                                                        Did you know the average parking fine doubles if left unpaid? Stay ahead with a PCN Cover. We’ll handle your fines quickly and help avoid late fees.
-                                                        <br />
-                                                        <p>🔒 <b>Secure your peace of mind today:</b></p>
-                                                        """
-                ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+            "message":"""
+            Did you know the average parking fine doubles if left unpaid? Stay ahead with a PCN Cover. We’ll handle your fines quickly and help avoid late fees.
+            <br />
+            <p>🔒 <b>Secure your peace of mind today:</b></p>
+            """
+            ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
             
             
             try:

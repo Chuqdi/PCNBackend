@@ -52,7 +52,7 @@ class User(AbstractUser):
     email  = models.EmailField(blank=False, null=False, unique=True,max_length=200, db_index=True)
     # home_address = models.TextField(blank=True, null=True)
     stripe_id = models.TextField()
-    subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE)
+    subscription = models.ForeignKey(Subscription, null=True, blank=True, on_delete=models.CASCADE, related_name="subscription")
     is_new = models.BooleanField(default=True)
     is_active = models.BooleanField(default=False)
     vehicle_count = models.IntegerField(default=0)
