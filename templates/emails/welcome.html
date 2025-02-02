@@ -1,7 +1,7 @@
 {%include "emails/helpers/header.html" %}
 <tr width="100%">
   <td style="padding: 20px">
-    <p class="text">Hi {{ name }},</p>
+    <p class="text">Hi {{ name|strip }},</p>
 
     <p class="text">
       We're thrilled to have you on board.
@@ -29,7 +29,7 @@
     </p>
     <p class="text">
       Thank you for trusting
-      PCN. We’re excited to make your driving experience smoother and more
+      PCNTicket. We’re excited to make your driving experience smoother and more
       confident!
     </p>
   </td>
