@@ -182,7 +182,7 @@ class RegisterUserView(APIView):
 
 
 
-            message = render_to_string("emails/welcome.html", { "name":f"{first_name} {last_name}"})
+            message = render_to_string("emails/welcome.html", { "name":f"{first_name} {last_name}".strip()})
             t = threading.Thread(target=send_email, args=(f"Welcome {first_name}", message,[email]))
             t.start()
 
