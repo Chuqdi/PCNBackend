@@ -45,7 +45,7 @@ def send_user_first_subscription_message():
             "message":"""
             Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
             """
-            ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+            ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
             try:
                 send_email(
                     message=message,
@@ -76,7 +76,7 @@ def send_user_second_subscription_message():
             <br />
             <p>🔒 <b>Secure your peace of mind today:</b></p>
             """
-                ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+                ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
             
             
             try:
@@ -105,7 +105,7 @@ def send_user_24_hr_subscription_message(user_id):
                                                     <br />
                                                     <p>🔒 <b>Secure your peace of mind today:</b></p>
                                                     """
-            ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+            ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
         
         
         try:
@@ -134,7 +134,7 @@ def send_user_fridays_subscription_message(user_id):
             <br />
             <p>🔒 <b>Secure your peace of mind today:</b></p>
             """
-            ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+            ,"btnTitle":"Buy Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
             
             
             try:

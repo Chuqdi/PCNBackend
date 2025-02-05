@@ -83,7 +83,7 @@ def userSubscriptionNotification(user:User):
     title="Your cover purchase was successful"
     body=f"""Your {user.subscription.name} purchase was successful. <br /><br />
     You are covered and you can upload your first ticket 13 days from now. <br /><br />
-    For more information on ticket allowances please visit our <a href='https://www.usepcn.com/terms-and-conditions'>terms and conditions.</a>"""
+    For more information on ticket allowances please visit our <a href='https://www.pcnticket.com/terms-and-conditions'>terms and conditions.</a>"""
     
     
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
@@ -262,7 +262,7 @@ class CreateSubscriptionIntent(APIView):
                 'quantity': 1,
             })
 
-        success_url = f'https://www.usepcn.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}'
+        success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}'
         
         if discountCode and len(discountCode) > 1:
             session = stripe.checkout.Session.create(
@@ -271,7 +271,7 @@ class CreateSubscriptionIntent(APIView):
                 mode='subscription',
                 customer=user.stripe_id,
                 success_url=success_url,
-                cancel_url='https://www.usepcn.com/?payment_cancelled=1',
+                cancel_url='https://www.pcnticket.com/?payment_cancelled=1',
                 discounts=[{
                     "coupon":discountCode,
                 }]
@@ -283,7 +283,7 @@ class CreateSubscriptionIntent(APIView):
                 mode='subscription',
                 customer=user.stripe_id,
                 success_url=success_url,
-                cancel_url='https://www.usepcn.com/?payment_cancelled=1',
+                cancel_url='https://www.pcnticket.com/?payment_cancelled=1',
             )
         
         print(session)

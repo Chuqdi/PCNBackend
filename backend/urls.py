@@ -16,7 +16,7 @@ def test(request):
                                                    "message":"""
                                                    Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
                                                    """
-        ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.usepcn.com/#pricings"})
+        ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),
