@@ -105,7 +105,7 @@ def userSubscriptionNotification(user:User):
         n_message = messaging.Message(
         notification=messaging.Notification(
             title=title,
-            body=body,
+            body="You are covered and you can upload your first ticket 13 days from now.",
         ),
         token=user_token.token.strip(),
     )
@@ -216,15 +216,15 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.save()
         
         
-        scheduleNotificationFor2DaysBeforeCancelling(
-            is_one_off=is_one_off,
-            user=user,
-            subscription=name
-        )
-        scheduleNotificationAfterCancelling(
-            user=user,
-            subscription=name
-        )
+        # scheduleNotificationFor2DaysBeforeCancelling(
+        #     is_one_off=is_one_off,
+        #     user=user,
+        #     subscription=name
+        # )
+        # scheduleNotificationAfterCancelling(
+        #     user=user,
+        #     subscription=name
+        # )
         
         t = threading.Thread(target=userSubscriptionNotification, args=(user,))
         t.start()
@@ -290,7 +290,6 @@ class CreateSubscriptionIntent(APIView):
                 cancel_url=cancel_url,
             )
         
-        print(session)
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
         
         
