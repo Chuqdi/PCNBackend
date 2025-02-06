@@ -10,6 +10,7 @@ from rest_framework import status
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
+from rest_framework import permissions
 from users.models import DeviceToken, User
 import json
 from datetime import timedelta
@@ -193,17 +194,19 @@ def scheduleNotificationFor2DaysBeforeCancelling(is_one_off:bool,user:User, subs
 
 
 class UpgradeUserSubscriptionPlan(APIView):
+    permission_classes = [permissions.AllowAny]
     def put(self, request):
         name = request.data.get("name")
         walletCount = request.data.get("walletCount")
         period = request.data.get("period")
         is_one_off = request.data.get("isOneOff")
+        email = request.data.get("email")
         
         subscription = Subscription.objects.create(
             name=name,
             period=period,
         )
-        user = request.user
+        user = User.objects.get(email=email)
         user.subscription = subscription
         user.isSubbedBefore = True
         user.vehicle_count = 0
@@ -262,7 +265,8 @@ class CreateSubscriptionIntent(APIView):
                 'quantity': 1,
             })
 
-        success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}'
+        success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}'
+        cancel_url = 'https://www.pcnticket.com/?payment_cancelled=1'
         
         if discountCode and len(discountCode) > 1:
             session = stripe.checkout.Session.create(
@@ -271,7 +275,7 @@ class CreateSubscriptionIntent(APIView):
                 mode='subscription',
                 customer=user.stripe_id,
                 success_url=success_url,
-                cancel_url='https://www.pcnticket.com/?payment_cancelled=1',
+                cancel_url=cancel_url,
                 discounts=[{
                     "coupon":discountCode,
                 }]
@@ -283,7 +287,7 @@ class CreateSubscriptionIntent(APIView):
                 mode='subscription',
                 customer=user.stripe_id,
                 success_url=success_url,
-                cancel_url='https://www.pcnticket.com/?payment_cancelled=1',
+                cancel_url=cancel_url,
             )
         
         print(session)

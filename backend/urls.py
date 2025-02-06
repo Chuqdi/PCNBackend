@@ -2,21 +2,27 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
-from django.template.loader import render_to_string
-from users.models import DeviceToken, User
-from utils.tasks import  test_async
-from firebase_admin import messaging
+from utils.tasks import send_email
  
 
 
 def test(request):
+    send_email(
+        subject="Subscription confirmation",
+        message="""
+                                                   We have gone through your data and we see your subscription was successfully and went through. Could you refresh your browser to confirm.
+                                                   """,
+       recipient_list=["2006samueldhoomun1@gmail.com"],
+       
+        
+    )
     
 
-    return render(request, "emails/message.html", {"name":"Hezekiah",
+    return render(request, "emails/message.html", {"name":"Samuel Dhoomun",
                                                    "message":"""
-                                                   Thanks for downloading <b>PCN Ticket</b>! Managing parking tickets just got easier. Did you know you can cover your fines directly through the app? With a PCN Cover, we handle the hassle for you: pay your fine or even contest unfair tickets!
+                                                   We have gone through your data and we see your subscription was successfully and went through. Could you refresh your browser to confirm.
                                                    """
-        ,"btnTitle":"Get Your Cover Now", "btnLink":"https://www.pcnticket.com/#pricings"})
+        ,})
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),
