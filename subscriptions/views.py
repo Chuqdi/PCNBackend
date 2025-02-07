@@ -250,8 +250,10 @@ class CreateSubscriptionIntent(APIView):
         peroid = request.data.get('peroid')
         joiningFee = request.data.get('joiningFee')
         isOneOff= request.data.get("isOneOff")
+        isMobile= request.data.get("isMobile","0")
         
         
+        # price_1QXftWEaYyTuzzYVRuJV7WdV
         line_items =[
                 {
                    "price":priceId,
@@ -265,8 +267,8 @@ class CreateSubscriptionIntent(APIView):
                 'quantity': 1,
             })
 
-        success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}'
-        cancel_url = 'https://www.pcnticket.com/?payment_cancelled=1'
+        success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
+        cancel_url = 'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
         
         if discountCode and len(discountCode) > 1:
             session = stripe.checkout.Session.create(
