@@ -3,7 +3,11 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
+from django.utils.timezone import now
+from datetime import datetime, timedelta
 import stripe
+from subscriptions.models import Subscription
+from subscriptions.views import handleReferalCreditting, userSubscriptionNotification
 from users.models import User
 from utils.tasks import send_email  
 
@@ -32,6 +36,8 @@ def stripe_webhook(request):
     # Handle the event
     if event.type == 'customer.subscription.trial_will_end':
         handle_trial_will_end(event.data.object)
+    if event.type == "customer.subscription.created":
+        handle_subscription_created(event.data.object)
     elif event.type == 'customer.subscription.updated':
         handle_subscription_updated(event.data.object)
     elif event.type == 'invoice.payment_succeeded':
@@ -41,6 +47,39 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
+
+def handle_subscription_created(subscription):
+    try:
+        user = User.objects.get(id=subscription.metadata.get('user_id'))
+        name = subscription.metadata.get('name')
+        walletCount = subscription.metadata.get('walletCount')
+        period = subscription.metadata.get('period')
+        
+        subscription = Subscription.objects.create(
+            name=name,
+            period=period,
+        )
+        user.subscription = subscription
+        user.isSubbedBefore = True
+        user.vehicle_count = 0
+        user.pcn_count = 0
+        user.walletCount = walletCount
+        user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
+        user.save()
+        print(user)
+        print(name)
+        print(walletCount)
+        print(period)
+        
+        t = threading.Thread(target=userSubscriptionNotification, args=(user,))
+        t.start()
+        
+        handleReferalCreditting(instance=user)
+        
+    except User.DoesNotExist:
+        print(f"User not found for subscription: {subscription.id}")
+        
+        
 def handle_trial_will_end(subscription):
     # Get user from subscription metadata
     try:

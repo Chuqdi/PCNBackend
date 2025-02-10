@@ -213,7 +213,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.pcn_count = 0
         user.walletCount = walletCount
         user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
-        user.save()
+        # user.save()
         
         
         # scheduleNotificationFor2DaysBeforeCancelling(
@@ -226,11 +226,11 @@ class UpgradeUserSubscriptionPlan(APIView):
         #     subscription=name
         # )
         
-        t = threading.Thread(target=userSubscriptionNotification, args=(user,))
-        t.start()
+        # t = threading.Thread(target=userSubscriptionNotification, args=(user,))
+        # t.start()
         
         
-        handleReferalCreditting(instance=user)
+        # handleReferalCreditting(instance=user)
         
         
         return ResponseGenerator.response(
