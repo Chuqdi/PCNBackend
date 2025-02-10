@@ -30,7 +30,6 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
     
-    print(event.type)
     
 
     # Handle the event
@@ -66,10 +65,6 @@ def handle_subscription_created(subscription):
         user.walletCount = walletCount
         user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
         user.save()
-        print(user)
-        print(name)
-        print(walletCount)
-        print(period)
         
         t = threading.Thread(target=userSubscriptionNotification, args=(user,))
         t.start()
@@ -97,27 +92,22 @@ def handle_trial_will_end(subscription):
 def handle_subscription_updated(subscription):
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
-        
-        if subscription.trial_end:
-            has_trial_ended = subscription.trial_end < stripe.Util.now()
+        if subscription.status == 'active':
+            message ='''
+            Your subscription has been renewed. Please renew to continue using PCN.
+            '''
+            t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+            t.start()
+        elif subscription.status in ['incomplete', 'past_due']:
+            user.subscription = None
+            message ='''
+            Your subscription has been cancelled. Please renew to continue using PCN.
+            '''
             
-            if has_trial_ended:
-                if subscription.status == 'active':
-                    message ='''
-                    Your subscription has been renewed. Please renew to continue using PCN.
-                    '''
-                    t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
-                    t.start()
-                elif subscription.status in ['incomplete', 'past_due']:
-                    user.subscription = None
-                    message ='''
-                    Your subscription has been cancelled. Please renew to continue using PCN.
-                    '''
-                    
-                    t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
-                    t.start()
-                
-                user.save()
+            t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+            t.start()
+        
+        user.save()
     except User.DoesNotExist:
         print(f"User not found for subscription: {subscription.id}")
 
@@ -141,7 +131,7 @@ def handle_payment_failed(invoice):
         user.subscription = None
         user.save()
         message ='''
-        Your subscription has been cancelled. Please renew to continue using PCN.
+        Your subscription payment was not successful. Please renew to continue using PCN.
         '''
         
         t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
