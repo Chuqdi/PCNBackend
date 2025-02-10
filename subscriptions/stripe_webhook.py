@@ -96,10 +96,7 @@ def handle_subscription_updated(subscription):
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
         if subscription.status == 'active':
-            message ='''
-            Your subscription has been actived. 
-            '''
-            t = threading.Thread(target=send_email, args=(f"Subscription activated", message,[user.email]))
+            t = threading.Thread(target=userSubscriptionNotification, args=(user,))
             t.start()
         elif subscription.status in ['incomplete', 'past_due']:
             user.subscription = None
