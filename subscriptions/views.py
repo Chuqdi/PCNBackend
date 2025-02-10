@@ -265,7 +265,11 @@ class CreateSubscriptionIntent(APIView):
                    "price":priceId,
                     "quantity":1
         }]
-        subscription_data ={}
+        subscription_data ={
+            'metadata': {
+                    'user_id': str(user.id), 
+            }
+        }
         
        
         if isLastCover==1 and  not user.isSubbedBefore:
