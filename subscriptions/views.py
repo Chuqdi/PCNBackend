@@ -213,6 +213,8 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.pcn_count = 0
         user.walletCount = walletCount
         user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
+        
+        
         # user.save()
         
         
@@ -251,6 +253,10 @@ class CreateSubscriptionIntent(APIView):
         joiningFee = request.data.get('joiningFee')
         isOneOff= request.data.get("isOneOff")
         isMobile= request.data.get("isMobile","0")
+        isLastCover = request.data.get("isLastCover", 0)
+        
+        
+        
         
         
         # price_1QXftWEaYyTuzzYVRuJV7WdV
@@ -259,13 +265,28 @@ class CreateSubscriptionIntent(APIView):
                    "price":priceId,
                     "quantity":1
         }]
+        subscription_data ={}
         
        
-        if not user.isSubbedBefore:
+        if isLastCover==1 and  not user.isSubbedBefore:
             line_items.append({
                 "price":joiningFee,
                 'quantity': 1,
             })
+        if isLastCover==0:
+            subscription_data ={
+                'trial_period_days': 14,
+                'metadata': {
+                    'user_id': str(user.id),  
+                    "name" : name,
+                    "walletCount" : walletCount,
+                    "period" : peroid,
+                    "is_one_off" : isOneOff,
+                    "email":user.email
+                },
+            }
+            
+            
 
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
         cancel_url = f'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
@@ -279,17 +300,7 @@ class CreateSubscriptionIntent(APIView):
                 customer=user.stripe_id,
                 success_url=success_url,
                 cancel_url=cancel_url,
-                subscription_data={
-                'trial_period_days': 14,
-                'metadata': {
-                    'user_id': str(user.id),  
-                    "name" : name,
-                    "walletCount" : walletCount,
-                    "period" : peroid,
-                    "is_one_off" : isOneOff,
-                    "email":user.email
-                },
-            },
+                subscription_data=subscription_data,
                 discounts=[{
                     "coupon":discountCode,
                 }]
@@ -302,17 +313,7 @@ class CreateSubscriptionIntent(APIView):
                 customer=user.stripe_id,
                 success_url=success_url,
                 cancel_url=cancel_url,
-                subscription_data={
-                'trial_period_days': 14,
-                'metadata': {
-                    'user_id': str(user.id),  
-                    "name" : name,
-                    "walletCount" : walletCount,
-                    "period" : peroid,
-                    "is_one_off" : isOneOff,
-                    "email":user.email
-                },
-            },
+                subscription_data=subscription_data,
             )
         
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")

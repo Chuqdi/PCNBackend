@@ -71,7 +71,8 @@ def handle_subscription_created(subscription):
         
         handleReferalCreditting(instance=user)
         
-    except User.DoesNotExist:
+    except User.DoesNotExist as exception:
+        print(exception)
         print(f"User not found for subscription: {subscription.id}")
         
         
