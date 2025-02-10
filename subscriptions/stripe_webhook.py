@@ -84,7 +84,7 @@ def handle_trial_will_end(subscription):
         Your trial will end in 3 days.
         '''
         
-        t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+        t = threading.Thread(target=send_email, args=(f"Subscription cancellation", message,[user.email]))
         t.start()
         
     except User.DoesNotExist:
@@ -95,9 +95,9 @@ def handle_subscription_updated(subscription):
         user = User.objects.get(id=subscription.metadata.get('user_id'))
         if subscription.status == 'active':
             message ='''
-            Your subscription has been renewed. Please renew to continue using PCN.
+            Your subscription has been actived. 
             '''
-            t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+            t = threading.Thread(target=send_email, args=(f"Subscription activated", message,[user.email]))
             t.start()
         elif subscription.status in ['incomplete', 'past_due']:
             user.subscription = None
