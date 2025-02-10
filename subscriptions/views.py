@@ -268,7 +268,7 @@ class CreateSubscriptionIntent(APIView):
             })
 
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
-        cancel_url = 'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
+        cancel_url = f'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
         
         if discountCode and len(discountCode) > 1:
             session = stripe.Subscription.create(
@@ -283,6 +283,11 @@ class CreateSubscriptionIntent(APIView):
                 'trial_period_days': 14,
                 'metadata': {
                     'user_id': str(user.id),  
+                    "name" : name,
+                    "walletCount" : walletCount,
+                    "period" : peroid,
+                    "is_one_off" : isOneOff,
+                    "email":user.email
                 },
             },
                 discounts=[{
@@ -301,6 +306,11 @@ class CreateSubscriptionIntent(APIView):
                 'trial_period_days': 14,
                 'metadata': {
                     'user_id': str(user.id),  
+                    "name" : name,
+                    "walletCount" : walletCount,
+                    "period" : peroid,
+                    "is_one_off" : isOneOff,
+                    "email":user.email
                 },
             },
             )
