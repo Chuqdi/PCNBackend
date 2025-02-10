@@ -31,6 +31,8 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
     
     
+    print(event.type)
+    
 
     # Handle the event
     if event.type == 'customer.subscription.trial_will_end':
