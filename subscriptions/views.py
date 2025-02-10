@@ -268,6 +268,7 @@ class CreateSubscriptionIntent(APIView):
         subscription_data ={
             'metadata': {
                     'user_id': str(user.id), 
+                    "walletCount" : walletCount,
             }
         }
         
