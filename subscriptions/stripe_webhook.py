@@ -15,6 +15,7 @@ webhook_secret = settings.STRIPE_WEBHOOK_SECRET
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    print("stripe hook started")
 
     try:
         event = stripe.Webhook.construct_event(
@@ -24,6 +25,9 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
+    
+    print(event.data.object)
+    
 
     # Handle the event
     if event.type == 'customer.subscription.trial_will_end':

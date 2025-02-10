@@ -261,11 +261,11 @@ class CreateSubscriptionIntent(APIView):
         }]
         
        
-        # if not user.isSubbedBefore:
-        #     line_items.append({
-        #         "price":joiningFee,
-        #         'quantity': 1,
-        #     })
+        if not user.isSubbedBefore:
+            line_items.append({
+                "price":joiningFee,
+                'quantity': 1,
+            })
 
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
         cancel_url = 'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
@@ -278,10 +278,13 @@ class CreateSubscriptionIntent(APIView):
                 trial_period_days=14,
                 customer=user.stripe_id,
                 success_url=success_url,
-                metadata={
-                    'user_id': str(user.id)
-                },
                 cancel_url=cancel_url,
+                subscription_data={
+                'trial_period_days': 14,
+                'metadata': {
+                    'user_id': str(user.id),  
+                },
+            },
                 discounts=[{
                     "coupon":discountCode,
                 }]
@@ -289,15 +292,17 @@ class CreateSubscriptionIntent(APIView):
         else:
             session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
-                items=line_items,
+                line_items=line_items,
                 mode='subscription',
-                trial_period_days=14,
                 customer=user.stripe_id,
                 success_url=success_url,
-                metadata={
-                    'user_id': str(user.id)
-                },
                 cancel_url=cancel_url,
+                subscription_data={
+                'trial_period_days': 14,
+                'metadata': {
+                    'user_id': str(user.id),  
+                },
+            },
             )
         
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
