@@ -49,7 +49,8 @@ def stripe_webhook(request):
     return HttpResponse(status=200)
 
 
-def onsub(user):
+def onsub(subscription):
+    user = User.objects.get(id=subscription.metadata.get('user_id'))
     name = subscription.metadata.get('name')
     walletCount = subscription.metadata.get('walletCount')
     period = subscription.metadata.get('period')
@@ -73,8 +74,7 @@ def onsub(user):
     handleReferalCreditting(instance=user)
 def handle_subscription_created(subscription):
     try:
-        user = User.objects.get(id=subscription.metadata.get('user_id'))
-        onsub(user)
+        onsub(subscription=subscription)
 
         
     except User.DoesNotExist as exception:
@@ -100,7 +100,7 @@ def handle_subscription_updated(subscription):
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
         if subscription.status == 'active':
-             onsub(user)
+             onsub(subscription=subscription)
         elif subscription.status in ['incomplete', 'past_due']:
             user.subscription = None
             message ='''
