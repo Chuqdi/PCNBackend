@@ -260,11 +260,19 @@ class CreateSubscriptionIntent(APIView):
         
         
         # price_1QXftWEaYyTuzzYVRuJV7WdV
+        # line_items =[
+        #         {
+        #            "price":priceId,
+        #             "quantity":1
+        # }]
+        
         line_items =[
                 {
-                   "price":priceId,
+                   "price":"price_1QXftWEaYyTuzzYVRuJV7WdV",
                     "quantity":1
         }]
+        
+        
         subscription_data ={
             'metadata': {
                     'user_id': str(user.id), 
