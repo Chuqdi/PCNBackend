@@ -47,6 +47,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "profile_image",
             # "home_address",
             "isSubbedBefore",
+            'document_verified',
             "date_for_next_pcn_upload",
             "is_staff",
             "subscription",

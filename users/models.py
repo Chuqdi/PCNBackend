@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils import timezone
-
 from subscriptions.models import Subscription
 
 
@@ -63,6 +62,7 @@ class User(AbstractUser):
     refered_by_code = models.CharField(max_length=100, null=True, blank=True)
     isReferalUsed = models.BooleanField(default=False)
     isSubbedBefore = models.BooleanField(default=False)
+    document_verified = models.BooleanField(default=False)
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
 
     USERNAME_FIELD = 'email'
@@ -108,3 +108,17 @@ class UserEmailActivationCode(models.Model):
     def __str__(self):
         return self.user.email
     
+
+
+
+
+class VerificationSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    stripe_session_id = models.CharField(max_length=255)
+    status = models.CharField(max_length=50, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    verification_details = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Verification for {self.user.email}"

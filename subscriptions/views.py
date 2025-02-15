@@ -11,7 +11,7 @@ from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from rest_framework import permissions
-from users.models import DeviceToken, User
+from users.models import DeviceToken, User,VerificationSession
 import json
 from datetime import timedelta
 from django.utils.timezone import now
@@ -352,3 +352,43 @@ class CancelSubscription(APIView):
         
         
         
+        
+        
+class VerificationViews(APIView):
+    def post(self, request):
+        try:
+            verification_session = stripe.identity.VerificationSession.create(
+                type='document',
+                metadata={
+                    'user_id': str(request.user.id),
+                },
+                options={
+                    'document': {
+                        'allowed_types': ['driving_license', 'passport', 'id_card'],
+                        'require_id_number': True,
+                        'require_live_capture': True,
+                        'require_matching_selfie': True,
+                    }
+                },
+                return_url="https://www.pcnticket.com",
+            )
+
+            VerificationSession.objects.create(
+                user=request.user,
+                stripe_session_id=verification_session.id,
+                status='pending'
+            )
+            
+            return ResponseGenerator.response(
+                data=verification_session.client_secret,
+                status=status.HTTP_200_OK,
+                message="Verification session created successfully"
+            )
+
+            
+        except Exception as e:
+            return ResponseGenerator.response(
+                data={},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                message="An error occurred while creating verification session"
+            )
