@@ -6,9 +6,10 @@ from django.conf import settings
 from django.utils.timezone import now
 from datetime import datetime, timedelta
 import stripe
+from django.template.loader import render_to_string
 from subscriptions.models import Subscription
 from subscriptions.views import handleReferalCreditting, userSubscriptionNotification
-from users.models import User
+from users.models import User, VerificationSession
 from utils.tasks import send_email  
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -45,6 +46,13 @@ def stripe_webhook(request):
         handle_payment_succeeded(event.data.object)
     elif event.type == 'invoice.payment_failed':
         handle_payment_failed(event.data.object)
+    
+    elif event.type == 'identity.verification_session.verified':
+        handle_verified_session(event.data.object)
+    elif event.type == 'identity.verification_session.requires_input':
+        handle_requires_input(event.data.object)
+    elif event.type == 'identity.verification_session.canceled':
+        handle_canceled_session(event.data.object)
 
     return HttpResponse(status=200)
 
@@ -66,12 +74,65 @@ def onsub(subscription):
     user.walletCount = walletCount
     user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
     user.save()
-    print("subscription added successfully")
     
     t = threading.Thread(target=userSubscriptionNotification, args=(user,))
     t.start()
     
     handleReferalCreditting(instance=user)
+
+
+
+def handle_verified_session(session):
+    verification = VerificationSession.objects.get(
+        stripe_session_id=session.id
+    )
+    verification.status = 'verified'
+    user = User.objects.get(email = verification.user.email)
+    user.document_verified = True
+    user.save()
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
+        Documents verified successfully
+        '''})
+        
+    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+    t.start()
+    verification.verification_details = session.verified_outputs
+    verification.save()
+
+def handle_requires_input(session):
+    verification = VerificationSession.objects.get(
+        stripe_session_id=session.id
+    )
+    
+    verification.status = 'requires_input'
+    verification.save()
+    
+    
+    user = User.objects.get(email = verification.user.email)
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
+        Documents verified failed. More input required
+        '''})
+        
+    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+    t.start()
+    
+    
+
+def handle_canceled_session(session):
+    verification = VerificationSession.objects.get(
+        stripe_session_id=session.id
+    )
+    verification.status = 'canceled'
+    verification.save()
+    
+    user = User.objects.get(email = verification.user.email)
+    message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
+        Documents verified was cancelled
+        '''})
+        
+    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+    t.start()
+
 def handle_subscription_created(subscription):
     try:
         onsub(subscription=subscription)
@@ -86,9 +147,9 @@ def handle_trial_will_end(subscription):
     # Get user from subscription metadata
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
-        message ='''
+        message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
         Your trial will end in 3 days.
-        '''
+        '''})
         
         t = threading.Thread(target=send_email, args=(f"Subscription cancellation", message,[user.email]))
         t.start()
@@ -103,9 +164,9 @@ def handle_subscription_updated(subscription):
              onsub(subscription=subscription)
         elif subscription.status in ['incomplete', 'past_due']:
             user.subscription = None
-            message ='''
+            message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
             Your subscription has been cancelled. Please renew to continue using PCN.
-            '''
+            '''})
             
             t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
             t.start()
@@ -118,9 +179,9 @@ def handle_payment_succeeded(invoice):
     subscription = stripe.Subscription.retrieve(invoice.subscription)
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
-        message ='''
+        message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
         Your subscription payment was successfully
-        '''
+        '''})
         
         t = threading.Thread(target=send_email, args=(f"Subscription paid", message,[user.email]))
         t.start()
@@ -133,9 +194,10 @@ def handle_payment_failed(invoice):
         user = User.objects.get(id=subscription.metadata.get('user_id'))
         user.subscription = None
         user.save()
-        message ='''
+        
+        message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
         Your subscription payment was not successful. Please renew to continue using PCN.
-        '''
+        '''})
         
         t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
         t.start()
