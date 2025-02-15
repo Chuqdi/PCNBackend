@@ -259,7 +259,7 @@ class CreateSubscriptionIntent(APIView):
         
         
         
-        # price_1NeZq5EaYyTuzzYVMmZ8MpWz
+        # price_1QXftWEaYyTuzzYVRuJV7WdV
         # line_items =[
         #         {
         #            "price":priceId,
@@ -268,7 +268,7 @@ class CreateSubscriptionIntent(APIView):
         
         line_items =[
                 {
-                   "price":"price_1NeZq5EaYyTuzzYVMmZ8MpWz",
+                   "price":"price_1QXftWEaYyTuzzYVRuJV7WdV",
                     "quantity":1
         }]
         
