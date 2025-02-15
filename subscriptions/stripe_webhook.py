@@ -99,7 +99,7 @@ def handle_verified_session(session):
         
     t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
     t.start()
-    verification.verification_details = session.verified_outputs
+    # verification.verification_details = session.verified_outputs
     verification.save()
 
 def handle_requires_input(session):
