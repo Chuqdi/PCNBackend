@@ -93,6 +93,9 @@ def handle_verified_session(session):
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
         Documents verified successfully
         '''})
+    
+    print("verification")
+    print(verification)
         
     t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
     t.start()
@@ -106,6 +109,8 @@ def handle_requires_input(session):
     
     verification.status = 'requires_input'
     verification.save()
+    print("verification")
+    print(verification)
     
     
     user = User.objects.get(email = verification.user.email)
@@ -124,6 +129,8 @@ def handle_canceled_session(session):
     )
     verification.status = 'canceled'
     verification.save()
+    print("verification")
+    print(verification)
     
     user = User.objects.get(email = verification.user.email)
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
