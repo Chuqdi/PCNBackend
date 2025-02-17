@@ -414,12 +414,14 @@ class MobileDocumentVerification(APIView):
         
         
 class VerificationViews(APIView):
-    def post(self, request):
+    permission_classes=[permissions.AllowAny]
+    def post(self, request, email):
         try:
+            user = User.objects.get(email=email)
             verification_session = stripe.identity.VerificationSession.create(
                 type='document',
                 metadata={
-                    'user_id': str(request.user.id),
+                    'user_id': str(user.id),
                 },
                 options={
                     'document': {
@@ -433,7 +435,7 @@ class VerificationViews(APIView):
             )
 
             VerificationSession.objects.create(
-                user=request.user,
+                user=user,
                 stripe_session_id=verification_session.id,
                 status='pending'
             )
