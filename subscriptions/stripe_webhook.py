@@ -4,16 +4,34 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.utils.timezone import now
-from datetime import datetime, timedelta
+from datetime import timedelta
 import stripe
+from firebase_admin import messaging
 from django.template.loader import render_to_string
 from subscriptions.models import Subscription
 from subscriptions.views import handleReferalCreditting, userSubscriptionNotification
-from users.models import User, VerificationSession
+from users.models import DeviceToken, User, VerificationSession
 from utils.tasks import send_email  
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+
+
+
+def send_mobile_notification(user:User, title:str,message:str,):
+    try:
+        user_token = DeviceToken.objects.get(user = user)
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=message,
+        ),
+        data={},
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+    except Exception as e:
+        print(e)
 
 @csrf_exempt
 @require_POST
@@ -91,15 +109,23 @@ def handle_verified_session(session):
     user.document_verified = True
     user.save()
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-        Documents verified successfully
+        Documents verification
         '''})
     
-    print("verification")
-    print(verification)
         
     t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
     t.start()
     # verification.verification_details = session.verified_outputs
+    
+    
+    
+    send_mobile_notification(
+            user,
+            title="Documents verification",
+            message="Documents verified"
+            
+        )
+    
     verification.save()
 
 def handle_requires_input(session):
@@ -109,8 +135,6 @@ def handle_requires_input(session):
     
     verification.status = 'requires_input'
     verification.save()
-    print("verification")
-    print(verification)
     
     
     user = User.objects.get(email = verification.user.email)
@@ -120,6 +144,14 @@ def handle_requires_input(session):
         
     t = threading.Thread(target=send_email, args=(f"Documents verification", message,[user.email]))
     t.start()
+    
+    
+    send_mobile_notification(
+            user,
+            title="Documents verification",
+            message="We are not able to verify your identity. Please try again."
+            
+        )
     
     
 
@@ -137,6 +169,13 @@ def handle_canceled_session(session):
         
     t = threading.Thread(target=send_email, args=(f"Documents verification", message,[user.email]))
     t.start()
+    
+    send_mobile_notification(
+            user,
+            title="Documents verification",
+            message="We are not able to verify your identity. Please try again."
+            
+        )
 
 def handle_subscription_created(subscription):
     try:
@@ -206,5 +245,7 @@ def handle_payment_failed(invoice):
         
         t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
         t.start()
+        
+       
     except User.DoesNotExist:
         print(f"User not found for invoice: {invoice.id}")
