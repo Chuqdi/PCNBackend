@@ -293,7 +293,7 @@ class CreateSubscriptionIntent(APIView):
                 'quantity': 1,
             })
         if isLastCover==0:
-            subscription_data["trial_period_days"] =14
+            subscription_data["trial_period_days"] =7
             
 
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
@@ -356,7 +356,58 @@ class CancelSubscription(APIView):
         
 
 
+class MobileDocumentVerification(APIView):
+    def post(self, request):
+        try:
+            
+            verification_session = stripe.identity.VerificationSession.create(
+                type='document',
+                metadata={
+                    'user_id': str(request.user.id),
+                },
+                options={
+                    'document': {
+                        'allowed_types': ['driving_license', 'passport', 'id_card'],
+                        'require_id_number': True,
+                        'require_live_capture': True,
+                        'require_matching_selfie': True,
+                    }
+                },
+                return_url="https://www.pcnticket.com",
+            )
+            
+            ephemeral_key = stripe.EphemeralKey.create(
+            verification_session=verification_session.id,
+            stripe_version='2022-11-15',
+        )
+            
+            print(verification_session.id)
+            print(ephemeral_key.secret)
 
+            VerificationSession.objects.create(
+                user=request.user,
+                stripe_session_id=verification_session.id,
+                status='pending'
+            )
+            
+            return ResponseGenerator.response(
+                data={
+                     "session_id":verification_session.id,
+                    'ephemeral_key_secret': ephemeral_key.secret,
+                    },
+                status=status.HTTP_200_OK,
+                message="Verification session created successfully"
+            )
+
+            
+        except Exception as e:
+            return ResponseGenerator.response(
+                data={},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                message="An error occurred while creating verification session"
+            )
+
+        
         
         
         
