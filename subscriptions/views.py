@@ -267,10 +267,10 @@ class CreateSubscriptionIntent(APIView):
         # }]
         
         
-        #  price_1Qsum1EaYyTuzzYVeHp3ZLe2
+        #price_1QXWcOEaYyTuzzYVx9tvlPKC
         line_items =[
                 {
-                   "price":"price_1QXWcOEaYyTuzzYVx9tvlPKC",
+                   "price":"price_1Qsum1EaYyTuzzYVeHp3ZLe2",
                     "quantity":1
         }]
         
