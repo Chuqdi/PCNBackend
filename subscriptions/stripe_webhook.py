@@ -115,10 +115,10 @@ def handle_requires_input(session):
     
     user = User.objects.get(email = verification.user.email)
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-        Documents verified failed. More input required
+       We are not able to verify your identity. Please try again.
         '''})
         
-    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+    t = threading.Thread(target=send_email, args=(f"Documents verification", message,[user.email]))
     t.start()
     
     
@@ -129,15 +129,13 @@ def handle_canceled_session(session):
     )
     verification.status = 'canceled'
     verification.save()
-    print("verification")
-    print(verification)
     
     user = User.objects.get(email = verification.user.email)
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-        Documents verified was cancelled
+        We are not able to verify your identity. Please try again.
         '''})
         
-    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+    t = threading.Thread(target=send_email, args=(f"Documents verification", message,[user.email]))
     t.start()
 
 def handle_subscription_created(subscription):
