@@ -38,7 +38,7 @@ def create_profile(sender, instance, created, **kwargs):
             n_message = messaging.Message(
             notification=messaging.Notification(
                 title="We are processing your ticket payment",
-                body="We have received your ticket request and are currently processing it. Please find the details below",
+                body="We have received your PCN payment request and are currently processing it. Please find the details below.",
             ),
             token=user_token.token.strip(),
         )
