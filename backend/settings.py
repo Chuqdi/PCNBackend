@@ -246,3 +246,13 @@ firebase_admin.initialize_app(firebase_creds)
 
 
 REFERAL_CREDIT_AMOUNT = 5
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+    },
+}

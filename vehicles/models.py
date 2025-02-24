@@ -10,8 +10,8 @@ class Vehicle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     last_date_editted = models.DateTimeField(auto_now=True)
     
-    def __str__(self, request):
-        return self.vehicle_number
+    # def __str__(self, request):
+    #     return self.vehicle_number
     
     
     class Meta:
