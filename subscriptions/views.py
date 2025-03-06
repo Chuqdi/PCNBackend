@@ -295,7 +295,7 @@ class CreateSubscriptionIntent(APIView):
                 'quantity': 1,
             })
         if isLastCover==0:
-            subscription_data["trial_period_days"] =7
+            subscription_data["trial_period_days"] =3
             
 
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
