@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     "discount_codes",
     "subscription_email",
     "virualcards",
-    "user_notifications"
+    "user_notifications",
+    "user_messages"
 ]
 
 MIDDLEWARE = [
