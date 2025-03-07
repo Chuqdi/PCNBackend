@@ -25,6 +25,8 @@ def send_email( subject, message, recipient_list, ):
     message = EmailMessage(subject, message,  settings.DEFAULT_FROM_EMAIL,recipient_list)
     message.content_subtype = 'html' 
     message.send()
+    print(recipient_list)
+    print("email sent")
 
 
 

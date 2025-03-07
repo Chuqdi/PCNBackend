@@ -19,6 +19,7 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
             message = render_to_string("emails/message.html", { "name":instance.user.full_name,"message":instance.content})
             t = threading.Thread(target=send_email, args=(instance.title, message,[instance.user.email]))
             t.start()
+            
         
         if instance.as_mobile_notification:
             try:
@@ -33,7 +34,6 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
                 token=user_token.token.strip(),
             )
                 messaging.send(n_message)
-                print("sent")
             except Exception as e:
                 print(e)
             
