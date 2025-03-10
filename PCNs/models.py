@@ -12,6 +12,7 @@ class PCN(models.Model):
     front_ticket_image = models.ImageField(upload_to="front_ticket_image/")
     back_ticket_image = models.ImageField(upload_to="back_ticket_image/")
     is_paid = models.BooleanField(default=False)
+    is_denied = models.BooleanField(default=False)
     amount = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     
