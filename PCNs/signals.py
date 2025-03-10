@@ -15,7 +15,7 @@ from django.dispatch import receiver
 def create_profile(sender, instance, created, **kwargs):
     if not created and not instance.is_denied:
         message = render_to_string("emails/ticket_denied.html", { "name":instance.user.full_name,"ticket":instance})
-        t = threading.Thread(target=send_email, args=(f"Your PCN has been paid", message,[instance.user.email]))
+        t = threading.Thread(target=send_email, args=(f"Your PCN status update", message,[instance.user.email]))
         t.start()
     if not created and instance.is_paid:
         message = render_to_string("emails/ticket_approved.html", { "name":instance.user.full_name,"ticket":instance})
