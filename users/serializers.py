@@ -40,7 +40,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             "full_name",
             "is_new",
             "is_active",
-            # "phone_number",
+            "phone_number",
             "referalCode",
             "refered_by_code",
             "is_superuser",

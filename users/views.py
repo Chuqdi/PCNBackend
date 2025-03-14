@@ -547,3 +547,18 @@ class GetUserTokenWithEmail(APIView):
             })
         except:
             return Response(data ={ "message":"User with this email does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+class UpdateUserPhoneNumber(APIView):
+    permission_classes=[permissions.AllowAny]
+    def post(self, request, email):
+        user = User.objects.get(email = email )
+        phoneNumber = request.data.get("phoneNumber")
+        print(phoneNumber)
+        
+        if User.objects.filter(phone_number = phoneNumber).exists():
+            return ResponseGenerator.response(data={}, message="User with this phone number already exists", status=status.HTTP_400_BAD_REQUEST)
+        
+        user.phone_number = phoneNumber
+        user.save()
+        return ResponseGenerator.response(data=SignUpSerializer(user).data, message="User phone number updated", status=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken
+from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken
 
 
 
@@ -37,5 +37,6 @@ urlpatterns = [
     path("update_user_password/", UpdateUserPassword.as_view(), name="update_user_password"),
     path("get_user/<id>/", GetUserWithID.as_view(), name="get_user"),
     path("me/<int:id>/", UserMe.as_view(), name="user_me"),
+    path("update_phone_number/<email>/", UpdateUserPhoneNumber.as_view()),
     path("get_user_token_with_email/<email>/",GetUserTokenWithEmail.as_view())
 ]

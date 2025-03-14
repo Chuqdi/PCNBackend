@@ -63,6 +63,7 @@ class User(AbstractUser):
     isReferalUsed = models.BooleanField(default=False)
     isSubbedBefore = models.BooleanField(default=False)
     document_verified = models.BooleanField(default=False)
+    phone_number =models.TextField(null=True, blank=True, default="")
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
 
     USERNAME_FIELD = 'email'
