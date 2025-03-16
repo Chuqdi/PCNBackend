@@ -383,8 +383,6 @@ class MobileDocumentVerification(APIView):
             stripe_version='2022-11-15',
         )
             
-            print(verification_session.id)
-            print(ephemeral_key.secret)
 
             VerificationSession.objects.create(
                 user=request.user,

@@ -1,5 +1,6 @@
+import threading
 from celery import shared_task
-from users.models import  User
+from users.models import  DeviceToken, User
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -7,8 +8,57 @@ from celery import shared_task
 from django.template.loader import render_to_string
 from django.utils import timezone
 from datetime import timedelta
+from users.models import VerificationSession
+from firebase_admin import messaging
 
 
+
+
+
+def send_mobile_notification(user:User, title:str,message:str,):
+    try:
+        user_token = DeviceToken.objects.get(user = user)
+        n_message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=message,
+        ),
+        data={},
+        token=user_token.token.strip(),
+    )
+        messaging.send(n_message)
+    except Exception as e:
+        print(e)
+
+
+
+def verify_user_documents(user_id, verification_id):
+    if user.subscription and user.subscription.date_subscripted:
+    
+        verification = VerificationSession.objects.get(id=verification_id)
+        user = User.objects.get(id = user_id)
+        verification.status = 'verified'
+        user.document_verified = True
+        user.save()
+        message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
+            Documents verification
+            '''})
+        
+            
+        t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
+        t.start()
+        # verification.verification_details = session.verified_outputs
+        
+        
+        
+        send_mobile_notification(
+                user,
+                title="Documents verification",
+                message="Documents verified"
+                
+            )
+
+        verification.save()
 
 
 
@@ -156,3 +206,7 @@ def send_user_fridays_subscription_message(user_id):
         
 
 
+
+@shared_task
+def verify_user_account_document(user_id, verification_id):
+    verify_user_documents(user_id=user_id, verification_id=verification_id)

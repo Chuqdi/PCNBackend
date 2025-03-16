@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken
+from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken, UsersDashboardStats
 
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     
     
     ###ADMIN
+    path("dashboard_stats/", UsersDashboardStats.as_view()),
     path("get_users/",GetPostAdministrators.as_view(),),
     path("update_user_token/", AddUserDeviceToken.as_view(),),
     path("get_users_stats/", UsersStatsView.as_view(),),

@@ -27,6 +27,24 @@ from datetime import date
 
 
 
+class UsersDashboardStats(APIView):
+    def get(self, request):
+        all_users = User.objects.all()
+        basic_users = User.objects.filter(
+            subscription__name = "BASIC"
+        )
+        premium_users = User.objects.filter(
+            subscription__name = "PREMIUM"
+        )
+        late_cover = all_users.count() - (basic_users.count() + premium_users.count())
+        
+        return ResponseGenerator.response(data={
+            "users":all_users.count(),
+            "basic_users":basic_users.count(),
+            "premium_users":premium_users.count(),
+            "late_cover":late_cover
+            }, status=status.HTTP_200_OK, message="Users stats")
+
 
 class AddUserDeviceToken(APIView):
     permission_classes = [permissions.IsAuthenticated ]
@@ -554,7 +572,6 @@ class UpdateUserPhoneNumber(APIView):
     def post(self, request, email):
         user = User.objects.get(email = email )
         phoneNumber = request.data.get("phoneNumber")
-        print(phoneNumber)
         
         if User.objects.filter(phone_number = phoneNumber).exists():
             return ResponseGenerator.response(data={}, message="User with this phone number already exists", status=status.HTTP_400_BAD_REQUEST)

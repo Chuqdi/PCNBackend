@@ -1,17 +1,19 @@
+import json
 import threading
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.utils.timezone import now
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 import stripe
 from firebase_admin import messaging
 from django.template.loader import render_to_string
 from subscriptions.models import Subscription
 from subscriptions.views import handleReferalCreditting, userSubscriptionNotification
 from users.models import DeviceToken, User, VerificationSession
-from utils.tasks import send_email  
+from utils.tasks import send_email, verify_user_documents  
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 webhook_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -104,29 +106,53 @@ def handle_verified_session(session):
     verification = VerificationSession.objects.get(
         stripe_session_id=session.id
     )
-    verification.status = 'verified'
     user = User.objects.get(email = verification.user.email)
-    user.document_verified = True
-    user.save()
-    message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-        Documents verification
-        '''})
-    
+    if user.subscription and user.subscription.date_subscripted:
+        subscribed_date_plus4_days = user.subscription.date_subscripted + timedelta(days=4)
+
+        # Get today's date (using Django's timezone-aware now)
+        today = timezone.now().date()
         
-    t = threading.Thread(target=send_email, args=(f"Documents verified", message,[user.email]))
-    t.start()
-    # verification.verification_details = session.verified_outputs
-    
-    
-    
-    send_mobile_notification(
-            user,
-            title="Documents verification",
-            message="Documents verified"
+        if hasattr(subscribed_date_plus4_days, 'date'):
+            subscribed_date_plus4_days = subscribed_date_plus4_days.date()
             
-        )
+        
+        days_difference = (today - subscribed_date_plus4_days ).days
+        
+        if days_difference < 0:
+            target_date = timezone.now() + timedelta(days=days_difference)
     
-    verification.save()
+            minute = target_date.minute
+            hour = target_date.hour
+            day = target_date.day
+            month = target_date.month
+            day_of_week = target_date.weekday()  
+            
+            crontab, _ = CrontabSchedule.objects.get_or_create(
+                minute=minute,
+                hour=hour,
+                day_of_month=day,
+                month_of_year=month,
+                day_of_week=day_of_week,
+            )
+            
+
+            PeriodicTask.objects.create(
+                crontab=crontab,
+                task="utils.tasks.verify_user_account_document",
+                name=f"self.task_name_{user.id}_{verification.id}",
+                args=json.dumps([user.id, verification.id]),
+                one_off=True,
+            )
+
+        else:
+            verify_user_documents(user_id=user.id, verification_id=verification.id)
+            
+            ## Verify user
+            
+    else:
+        ## USER NOT SUBSCRIBED
+        pass
 
 def handle_requires_input(session):
     verification = VerificationSession.objects.get(
