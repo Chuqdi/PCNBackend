@@ -34,4 +34,6 @@ urlpatterns = [
     path("subscription_email/", include("subscription_email.urls")),
     path("virualcards/", include("virualcards.urls")),
     path("user_notifications/", include("user_notifications.urls")),
+    path("user_messages/", include("user_messages.urls")),
+    path("administrators/", include("administrators.urls")),
 ]

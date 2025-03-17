@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     "subscription_email",
     "virualcards",
     "user_notifications",
-    "user_messages"
+    "user_messages",
+    "administrators"
 ]
 
 MIDDLEWARE = [
@@ -257,3 +258,5 @@ STORAGES = {
         "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
     },
 }
+
+QUERY_LIMIT = 20

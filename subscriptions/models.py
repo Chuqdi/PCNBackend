@@ -9,6 +9,7 @@ class SubscriptionPeriodType(Enum):
 class SubscriptionType(Enum):
     BASIC = "BASIC"
     PREMIUM = "PREMIUM"
+    LATE ="LATE"
     
     
 class Subscription(models.Model):

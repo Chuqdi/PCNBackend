@@ -1,5 +1,7 @@
 import threading
 from django.shortcuts import render
+from PCNs.models import PCN
+from administrators.models import Admin
 from users.models import DeviceToken, ReferalCode, User
 from users.serializers import (
     ReferalCodeSerializer,
@@ -12,7 +14,6 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework import permissions
 from django.contrib.auth import logout
@@ -22,10 +23,70 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from utils.helpers import generateUserOTP, validateOTPCode
 from utils.TokenGenerator import generateToken
+import datetime 
 from datetime import date
+from django.utils import timezone
 
 
+class GetAllUsersView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        searchText = request.GET.get("searchText","")
+        searchCategory = request.GET.get("searchCategory", "")
+        
+        queryLimit = settings.QUERY_LIMIT
+        page = request.GET.get("page", 1)
+        requestPage = queryLimit * int(page)
+        startingPage = (int(page)-1)*queryLimit
+        
+        if searchCategory == "Basic":
+            users = users.filter(
+                subscription__name__icontains = "BASIC"
+            )
+        if searchCategory == "Premium":
+            users = users.filter(
+                subscription__name__icontains = "PREMIUM"
+            )
+        
+        if searchCategory == "Late":
+            users = users.filter(
+                subscription__name__icontains ="Late"
+            )
+        
+        if len(searchText) > 2:
+            users = users.filter(
+                Q(email__icontains=searchText) | Q(full_name__icontains=searchText)
+            )
+        users = users[int(startingPage):requestPage]
+        
+        
+        return ResponseGenerator.response(
+            data={
+                "data":SignUpSerializer(users, many=True).data,
+                "total":User.objects.all().count()
+                },
+            message="New users",
+            status=status.HTTP_200_OK
+        )
 
+class GetNewUsersView(APIView):
+    def get(self, request):
+        yesterday = timezone.now().date() - datetime.timedelta(days=1)
+
+        # Get today's date (end of day)
+        today = timezone.now().date() + datetime.timedelta(days=1)
+        new_users = User.objects.filter(
+            date_joined__gte=yesterday,
+            date_joined__lt=today
+        )
+        
+        return ResponseGenerator.response(
+            data={
+                "data":SignUpSerializer(new_users, many=True).data
+                },
+            message="New users",
+            status=status.HTTP_200_OK
+        )
 
 class UsersDashboardStats(APIView):
     def get(self, request):
@@ -36,13 +97,17 @@ class UsersDashboardStats(APIView):
         premium_users = User.objects.filter(
             subscription__name = "PREMIUM"
         )
-        late_cover = all_users.count() - (basic_users.count() + premium_users.count())
+        late_cover =  User.objects.filter(
+            subscription__name = "Late"
+        )
+        tickets = PCN.objects.all()
         
         return ResponseGenerator.response(data={
             "users":all_users.count(),
             "basic_users":basic_users.count(),
             "premium_users":premium_users.count(),
-            "late_cover":late_cover
+            "late_cover":late_cover.count(),
+            "tickets":tickets.count(),
             }, status=status.HTTP_200_OK, message="Users stats")
 
 
@@ -207,6 +272,12 @@ class RegisterUserView(APIView):
             user = User.objects.get(email=email)
             user.is_active= True
             user.save()
+            
+            admin = Admin.objects.filter(email = email)
+            if admin.exists():
+                for a in admin:
+                    a.accepted = True
+                    a.save()
 
 
             
@@ -579,3 +650,13 @@ class UpdateUserPhoneNumber(APIView):
         user.phone_number = phoneNumber
         user.save()
         return ResponseGenerator.response(data=SignUpSerializer(user).data, message="User phone number updated", status=status.HTTP_200_OK)
+
+
+
+
+class GetUserDetails(APIView):
+    def get(self, request, user_id):
+        user =  User.objects.get(id=user_id)
+        serializer = SignUpSerializer(user)
+        
+        return ResponseGenerator.response(data=serializer.data, status=status.HTTP_200_OK, message="User retrieved")

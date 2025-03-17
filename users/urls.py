@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken, UsersDashboardStats
+from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetAllUsersView, GetUserDetails, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken, UsersDashboardStats,GetNewUsersView
 
 
 
@@ -12,6 +12,9 @@ urlpatterns = [
     
     
     ###ADMIN
+    path("users/", GetAllUsersView.as_view()),
+    path("user_details/<user_id>/", GetUserDetails.as_view()),
+    path("get_new_users/", GetNewUsersView.as_view(),),
     path("dashboard_stats/", UsersDashboardStats.as_view()),
     path("get_users/",GetPostAdministrators.as_view(),),
     path("update_user_token/", AddUserDeviceToken.as_view(),),

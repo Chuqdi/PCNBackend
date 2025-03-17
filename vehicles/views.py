@@ -1,11 +1,24 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
+from users.models import User
 from users.serializers import SignUpSerializer
 from utils.ResponseGenerator import ResponseGenerator
 from vehicles.models import Vehicle
 from vehicles.serializers import VehicleSerializer
 
+
+
+class GetUserVehicle(APIView):
+    def get(self, request,user_id):
+        user = User.objects.get(id=user_id)
+        vehicles = Vehicle.objects.filter(user = user)
+        
+        return ResponseGenerator.response(
+            data=VehicleSerializer(vehicles, many=True).data,
+            message="Vehicles",
+            status=status.HTTP_200_OK
+        )
 
 class EditVehicleView(APIView):
     def put(self, request, id):
