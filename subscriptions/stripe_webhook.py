@@ -70,6 +70,7 @@ def stripe_webhook(request):
     elif event.type == 'identity.verification_session.verified':
         handle_verified_session(event.data.object)
     elif event.type == 'identity.verification_session.requires_input':
+        print("Require input")
         handle_requires_input(event.data.object)
     elif event.type == 'identity.verification_session.canceled':
         handle_canceled_session(event.data.object)
