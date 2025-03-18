@@ -440,6 +440,9 @@ class VerificationViews(APIView):
                 status='pending'
             )
             
+            user.document_verified = True
+            user.save()
+            
             return ResponseGenerator.response(
                 data=verification_session.client_secret,
                 status=status.HTTP_200_OK,
