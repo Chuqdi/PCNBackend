@@ -39,6 +39,7 @@ def verify_user_documents(user_id, verification_id):
         user = User.objects.get(id = user_id)
         verification.status = 'verified'
         user.document_verified = True
+        user.document_verification_with_success = True
         user.save()
         message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
             Documents verification
