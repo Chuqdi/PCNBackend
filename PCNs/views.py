@@ -33,7 +33,9 @@ class GetUserPCNsView (APIView):
         user = User.objects.get(id=user_id)
         pcns = PCN.objects.filter(user = user)
         return ResponseGenerator.response(
-            data=PCNSerializer(pcns, many=True).data,
+            data={
+                "data":
+                    PCNSerializer(pcns, many=True).data},
             message="PCNS retrieved",
             status=status.HTTP_200_OK
         )

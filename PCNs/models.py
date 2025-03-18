@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
 from vehicles.models import Vehicle
+from django.utils import timezone
 
 
 
@@ -15,7 +16,7 @@ class PCN(models.Model):
     is_denied = models.BooleanField(default=False)
     amount = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+    date_created = models.DateField(default=timezone.now)
 
     
     class Meta:
