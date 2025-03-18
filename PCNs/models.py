@@ -16,7 +16,7 @@ class PCN(models.Model):
     is_denied = models.BooleanField(default=False)
     amount = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateField(default=timezone.now)
+    date_created = models.DateTimeField(default=timezone.now)
 
     
     class Meta:

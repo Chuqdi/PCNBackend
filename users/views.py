@@ -333,7 +333,7 @@ class LoginUserView(APIView):
                 data={},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        user = user[0]
+        user = user.first()
         checking_password = check_password(request.data.get("password"), user.password)
 
         if isAdmin and user and not user.is_superuser:
