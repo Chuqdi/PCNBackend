@@ -74,22 +74,18 @@ def stripe_webhook(request):
         handle_requires_input(event.data.object)
     elif event.type == 'identity.verification_session.canceled':
         handle_canceled_session(event.data.object)
-    elif event['type'] == 'identity.verification_session.updated':
+    elif event['type'] == 'identity.verification_session.processing':
         session = event['data']['object']
-        print("last one")
-        print(session.id)        
-        print("last event")
-        if session.get('last_verification_report') and session.get('status') in ['processing', 'verified', 'requires_input']:
-            verification = VerificationSession.objects.get(
-                stripe_session_id=session.id
-            )
-            user = User.objects.get(email = verification.user.email)
-            
-            try:
-                user.document_verified = True
-                user.save()
-            except User.DoesNotExist:
-                return HttpResponse(status=404)
+        verification = VerificationSession.objects.get(
+            stripe_session_id=session.id
+        )
+        user = User.objects.get(email = verification.user.email)
+        
+        try:
+            user.document_verified = True
+            user.save()
+        except User.DoesNotExist:
+            return HttpResponse(status=404)
 
     return HttpResponse(status=200)
 
