@@ -15,6 +15,7 @@ class PCN(models.Model):
     is_paid = models.BooleanField(default=False)
     is_denied = models.BooleanField(default=False)
     amount = models.IntegerField(default=0)
+    reason_for_rejection = models.TextField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(default=timezone.now)
 
