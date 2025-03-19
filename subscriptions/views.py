@@ -82,9 +82,15 @@ def handleReferalCreditting(instance:User):
 
 def userSubscriptionNotification(user:User):
     title="Your cover purchase was successful"
-    body=f"""Your {user.subscription.name} purchase was successful. <br /><br />
-    You are covered and you can upload your first ticket 13 days from now. <br /><br />
+    body=f"""Your {user.subscription.name} COVER purchase was successful. <br /><br />
+    You are covered and you can now upload PCN’s. <br /><br />
     For more information on ticket allowances please visit our <a href='https://www.pcnticket.com/terms-and-conditions'>terms and conditions.</a>"""
+    
+    
+
+
+
+
     
     
     message = render_to_string("emails/message.html", { "name":user.full_name,"message":body})
@@ -105,7 +111,7 @@ def userSubscriptionNotification(user:User):
         n_message = messaging.Message(
         notification=messaging.Notification(
             title=title,
-            body="You are covered and you can upload your first ticket 13 days from now.",
+            body="You are covered and you can now upload a parking or penalty ticket.",
         ),
         token=user_token.token.strip(),
     )

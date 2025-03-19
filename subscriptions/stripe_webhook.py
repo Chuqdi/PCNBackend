@@ -263,7 +263,7 @@ def handle_payment_succeeded(invoice):
     try:
         user = User.objects.get(id=subscription.metadata.get('user_id'))
         message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-        Your subscription payment was successfully
+        Your subscription payment was successful
         '''})
         
         t = threading.Thread(target=send_email, args=(f"Subscription paid", message,[user.email]))
