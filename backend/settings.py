@@ -61,7 +61,8 @@ INSTALLED_APPS = [
     "virualcards",
     "user_notifications",
     "user_messages",
-    "administrators"
+    "administrators",
+    "chats"
 ]
 
 MIDDLEWARE = [
