@@ -16,8 +16,7 @@ def create_profile(sender, instance, created, **kwargs):
     if  created and not instance.sent:
         message = render_to_string("emails/message.html", { "name":instance.user.full_name,"message":instance.message})
         t = threading.Thread(target=send_email, args=(f"Support team", message,[instance.user.email]))
-        # t.start()
-        print("singla running")
+        t.start()
         
         
         try:
