@@ -39,7 +39,7 @@ class GetAdminUserMessages(APIView):
         user = User.objects.get(id=user_id)
         chats = Chat.objects.filter(
             user = user,
-        )
+        ).order_by("id")
         
         return ResponseGenerator.response(
             data=ChatSerializer(chats, many=True).data,
@@ -84,7 +84,7 @@ class GetMessageSetForAdmin(APIView):
 class SendMessageFromUserView(APIView):
     def get(self, request):
         user = request.user
-        chats = Chat.objects.filter(user =user)
+        chats = Chat.objects.filter(user =user).order_by("id")
         
         
         return ResponseGenerator.response(
