@@ -36,5 +36,6 @@ def create_profile(sender, instance, created, **kwargs):
             token=user_token.token.strip(),
         )
             messaging.send(n_message)
+            print("sent mobile")
         except Exception as e:
             print(e)
