@@ -27,7 +27,8 @@ def create_profile(sender, instance, created, **kwargs):
             n_message = messaging.Message(
                 data={
                     "screen":"Profile",
-                    "show_support_messages":"1"
+                    "show_support_messages":"1",
+                    "message":instance.message
                 },
             notification=messaging.Notification(
                 title="Support Team",
