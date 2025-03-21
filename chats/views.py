@@ -96,7 +96,7 @@ class SendMessageFromUserView(APIView):
     def post(self, request):
         data = request.data 
         is_admin = request.data.get("is_admin", False)
-        user = request.date.get("user")
+        user = request.data.get("user")
         serializer = ChatSerializer(data={ **data, "user":user if is_admin else request.user.id, "sent": True if not is_admin else False })
         
         if serializer.is_valid():
