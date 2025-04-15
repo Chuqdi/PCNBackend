@@ -52,7 +52,6 @@ def stripe_webhook(request):
         return HttpResponse(status=400)
     
     
-    print(event.type)
     
 
     # Handle the event
@@ -132,34 +131,34 @@ def handle_verified_session(session):
         
         days_difference = (today - subscribed_date_plus4_days ).days
         
-        if days_difference < 0:
-            target_date = timezone.now() + timedelta(days=days_difference)
+        # if days_difference < 0:
+        #     target_date = timezone.now() + timedelta(days=days_difference)
     
-            minute = target_date.minute
-            hour = target_date.hour
-            day = target_date.day
-            month = target_date.month
-            day_of_week = target_date.weekday()  
+        #     minute = target_date.minute
+        #     hour = target_date.hour
+        #     day = target_date.day
+        #     month = target_date.month
+        #     day_of_week = target_date.weekday()  
             
-            crontab, _ = CrontabSchedule.objects.get_or_create(
-                minute=minute,
-                hour=hour,
-                day_of_month=day,
-                month_of_year=month,
-                day_of_week=day_of_week,
-            )
+        #     crontab, _ = CrontabSchedule.objects.get_or_create(
+        #         minute=minute,
+        #         hour=hour,
+        #         day_of_month=day,
+        #         month_of_year=month,
+        #         day_of_week=day_of_week,
+        #     )
             
 
-            PeriodicTask.objects.create(
-                crontab=crontab,
-                task="utils.tasks.verify_user_account_document",
-                name=f"self.task_name_{user.id}_{verification.id}",
-                args=json.dumps([user.id, verification.id]),
-                one_off=True,
-            )
+        #     PeriodicTask.objects.create(
+        #         crontab=crontab,
+        #         task="utils.tasks.verify_user_account_document",
+        #         name=f"self.task_name_{user.id}_{verification.id}",
+        #         args=json.dumps([user.id, verification.id]),
+        #         one_off=True,
+        #     )
 
-        else:
-            verify_user_documents(user_id=user.id, verification_id=verification.id)
+        # else:
+        verify_user_documents(user_id=user.id, verification_id=verification.id)
             
             ## Verify user
             
