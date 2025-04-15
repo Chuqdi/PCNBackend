@@ -9,7 +9,7 @@ from rest_framework import status
 
 
 class MarkAsRead(APIView):
-    def patch(self, request, pk):
+    def post(self, request, pk):
         notification = Notification.objects.get(id=pk)
         notification.is_read = True
         notification.save()
