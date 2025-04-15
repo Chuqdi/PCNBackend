@@ -222,7 +222,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.date_for_next_pcn_upload = now().date() + timedelta(days=13)
         
         
-        # user.save()
+        user.save()
         
         
         # scheduleNotificationFor2DaysBeforeCancelling(
