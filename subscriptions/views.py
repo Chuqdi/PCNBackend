@@ -309,19 +309,32 @@ class CreateSubscriptionIntent(APIView):
         cancel_url = f'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
         
         if discountCode and len(discountCode) > 1:
-            session = stripe.Subscription.create(
-                payment_method_types=['card'],
-                items=line_items,
-                mode='subscription',
-                # trial_period_days=14,
-                customer=user.stripe_id,
-                success_url=success_url,
-                cancel_url=cancel_url,
-                subscription_data=subscription_data,
-                discounts=[{
-                    "coupon":discountCode,
-                }]
-            )
+            # session = stripe.Subscription.create(
+            #     payment_method_types=['card'],
+            #     items=line_items,
+            #     mode='subscription',
+            #     # trial_period_days=14,
+            #     customer=user.stripe_id,
+            #     success_url=success_url,
+            #     cancel_url=cancel_url,
+            #     subscription_data=subscription_data,
+            #     discounts=[{
+            #         "coupon":discountCode,
+            #     }]
+            # )
+            session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='subscription',
+            # trial_period_days=14,  # This would go in subscription_data
+            customer=user.stripe_id,
+            success_url=success_url,
+            cancel_url=cancel_url,
+            subscription_data=subscription_data,
+            discounts=[{
+                "coupon": discountCode,
+            }]
+        )
         else:
             session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
