@@ -38,6 +38,7 @@ class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.TextField()
     date_created = models.DateField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
     screen = models.TextField(
         choices=APP_SCREENS,
         null=True,

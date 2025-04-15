@@ -6,6 +6,18 @@ from .serializers import NotificationSerializer
 from rest_framework import status
 
 
+
+
+class MarkAsRead(APIView):
+    def patch(self, request, pk):
+        notification = Notification.objects.get(id=pk)
+        notification.is_read = True
+        notification.save()
+        return ResponseGenerator(
+            data = NotificationSerializer(notification).data,
+            message="Notification read",
+            status = status.HTTP_200_OK
+        )
 class GetUserNotificationsView(APIView):
     def get(self, request):
         user = request.user
