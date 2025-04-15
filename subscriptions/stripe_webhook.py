@@ -51,6 +51,8 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
     
+    print(event)
+    
     
     
 
