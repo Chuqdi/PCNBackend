@@ -121,52 +121,54 @@ def handle_verified_session(session):
         stripe_session_id=session.id
     )
     user = User.objects.get(email = verification.user.email)
-    if user.subscription and user.subscription.date_subscripted:
-        subscribed_date_plus4_days = user.subscription.date_subscripted + timedelta(days=4)
-
-        # Get today's date (using Django's timezone-aware now)
-        today = timezone.now().date()
-        
-        if hasattr(subscribed_date_plus4_days, 'date'):
-            subscribed_date_plus4_days = subscribed_date_plus4_days.date()
-            
-        
-        days_difference = (today - subscribed_date_plus4_days ).days
-        
-        # if days_difference < 0:
-        #     target_date = timezone.now() + timedelta(days=days_difference)
+    verify_user_documents(user_id=user.id, verification_id=verification.id)
     
-        #     minute = target_date.minute
-        #     hour = target_date.hour
-        #     day = target_date.day
-        #     month = target_date.month
-        #     day_of_week = target_date.weekday()  
+    # if user.subscription and user.subscription.date_subscripted:
+    #     subscribed_date_plus4_days = user.subscription.date_subscripted + timedelta(days=4)
+
+    #     # Get today's date (using Django's timezone-aware now)
+    #     today = timezone.now().date()
+        
+    #     if hasattr(subscribed_date_plus4_days, 'date'):
+    #         subscribed_date_plus4_days = subscribed_date_plus4_days.date()
             
-        #     crontab, _ = CrontabSchedule.objects.get_or_create(
-        #         minute=minute,
-        #         hour=hour,
-        #         day_of_month=day,
-        #         month_of_year=month,
-        #         day_of_week=day_of_week,
-        #     )
+        
+    #     days_difference = (today - subscribed_date_plus4_days ).days
+        
+    #     # if days_difference < 0:
+    #     #     target_date = timezone.now() + timedelta(days=days_difference)
+    
+    #     #     minute = target_date.minute
+    #     #     hour = target_date.hour
+    #     #     day = target_date.day
+    #     #     month = target_date.month
+    #     #     day_of_week = target_date.weekday()  
+            
+    #     #     crontab, _ = CrontabSchedule.objects.get_or_create(
+    #     #         minute=minute,
+    #     #         hour=hour,
+    #     #         day_of_month=day,
+    #     #         month_of_year=month,
+    #     #         day_of_week=day_of_week,
+    #     #     )
             
 
-        #     PeriodicTask.objects.create(
-        #         crontab=crontab,
-        #         task="utils.tasks.verify_user_account_document",
-        #         name=f"self.task_name_{user.id}_{verification.id}",
-        #         args=json.dumps([user.id, verification.id]),
-        #         one_off=True,
-        #     )
+    #     #     PeriodicTask.objects.create(
+    #     #         crontab=crontab,
+    #     #         task="utils.tasks.verify_user_account_document",
+    #     #         name=f"self.task_name_{user.id}_{verification.id}",
+    #     #         args=json.dumps([user.id, verification.id]),
+    #     #         one_off=True,
+    #     #     )
 
-        # else:
-        verify_user_documents(user_id=user.id, verification_id=verification.id)
+    #     # else:
+    #     verify_user_documents(user_id=user.id, verification_id=verification.id)
             
-            ## Verify user
+    #         ## Verify user
             
-    else:
-        ## USER NOT SUBSCRIBED
-        pass
+    # else:
+    #     ## USER NOT SUBSCRIBED
+    #     pass
 
 def handle_requires_input(session):
     verification = VerificationSession.objects.get(
