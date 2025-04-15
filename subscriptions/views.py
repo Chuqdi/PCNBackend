@@ -202,6 +202,7 @@ def scheduleNotificationFor2DaysBeforeCancelling(is_one_off:bool,user:User, subs
 class UpgradeUserSubscriptionPlan(APIView):
     permission_classes = [permissions.AllowAny]
     def put(self, request):
+        print(request.data)
         name = request.data.get("name")
         walletCount = request.data.get("walletCount")
         period = request.data.get("period")
