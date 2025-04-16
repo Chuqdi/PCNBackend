@@ -13,7 +13,7 @@ class MarkAsRead(APIView):
         notification = Notification.objects.get(id=pk)
         notification.is_read = True
         notification.save()
-        return ResponseGenerator(
+        return ResponseGenerator.response(
             data = NotificationSerializer(notification).data,
             message="Notification read",
             status = status.HTTP_200_OK
