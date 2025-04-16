@@ -270,7 +270,7 @@ def handle_payment_succeeded(invoice):
         '''})
         
         t = threading.Thread(target=send_email, args=(f"Subscription paid", message,[user.email]))
-        t.start()
+        # t.start()
     except User.DoesNotExist:
         print(f"User not found for invoice: {invoice.id}")
 
