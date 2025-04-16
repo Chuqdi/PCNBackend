@@ -21,7 +21,7 @@ class MarkAsRead(APIView):
 class GetUserNotificationsView(APIView):
     def get(self, request):
         user = request.user
-        notifications = Notification.objects.filter(user=user)
+        notifications = Notification.objects.filter(user=user).order_by("-id")
         serializer = NotificationSerializer(notifications, many=True)
         
         return ResponseGenerator.response(data =serializer.data, status=status.HTTP_200_OK, message="Get User Notifications" )
