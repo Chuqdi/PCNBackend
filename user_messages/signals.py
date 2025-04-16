@@ -2,6 +2,7 @@
 import threading
 from django.db.models.signals import post_save
 from firebase_admin import messaging
+from user_notifications.models import Notification
 from users.models import DeviceToken
 from .models import UserMessage
 from django.dispatch import receiver
@@ -38,5 +39,11 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
                 messaging.send(n_message)
             except Exception as e:
                 print(e)
+        
+        n= Notification.objects.create(
+            title =instance.title,
+            message = instance.content,
+            screen ="Notifications"
+        )
             
 
