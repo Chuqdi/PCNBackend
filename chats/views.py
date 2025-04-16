@@ -67,8 +67,8 @@ class GetMessageSetForAdmin(APIView):
     def get(self, request):
         latest_messages = Chat.objects.values('user').annotate(
             latest_id=Max('id')
-        ).values_list('latest_id', flat=True)
-        user_messages = Chat.objects.filter(id__in=latest_messages)
+        ).values_list('latest_id', flat=True).order_by("-date_sent")
+        user_messages = Chat.objects.filter(id__in=latest_messages).order_by("-date_sent")
         
         serializer = ChatSerializer(
             user_messages,
