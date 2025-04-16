@@ -53,7 +53,7 @@ class SendUserMessage(APIView):
             if usersCategory == "LATE_USERS":
                 users = users.filter(subscription__isnull=False,subscription__name__icontains="LATE")
                 
-            users = User.objects.filter(email="morganhezekiah111@gmail.com")
+            # users = User.objects.filter(email="morganhezekiah111@gmail.com")
                 
             t = threading.Thread(target=send_notification, kwargs={
                 "users":users,
