@@ -40,10 +40,12 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
             except Exception as e:
                 print(e)
         
-        n= Notification.objects.create(
-            title =instance.title,
-            message = instance.content,
-            screen ="Notifications"
-        )
+        if instance.user:
+            n= Notification.objects.create(
+                title =instance.title,
+                message = instance.content,
+                screen ="Notifications",
+                user = instance.user
+            )
             
 
