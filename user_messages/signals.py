@@ -31,10 +31,14 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
 
                 n_message = messaging.Message(
                 notification=messaging.Notification(
+                    data={
+                    "screen":"Notifications",
+                },
                     title=instance.title,
                     body=instance.content,
                 ),
                 token=user_token.token.strip(),
+                
             )
                 messaging.send(n_message)
             except Exception as e:
