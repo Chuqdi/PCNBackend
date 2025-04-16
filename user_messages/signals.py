@@ -22,8 +22,10 @@ def create_profile(sender, instance:UserMessage, created, **kwargs):
             
         
         if instance.as_mobile_notification:
+            print(instance.user.email)
             try:
                 user_token = DeviceToken.objects.get(user = instance.user)
+                print(user_token.token)
 
 
                 n_message = messaging.Message(
