@@ -219,7 +219,7 @@ class UpgradeUserSubscriptionPlan(APIView):
         user.vehicle_count = 0
         user.pcn_count = 0
         user.walletCount = walletCount
-        user.date_for_next_pcn_upload = now().date() + timedelta(days=2)
+        user.date_for_next_pcn_upload = now().date() + timedelta(minutes=10)
         
         
         user.save()

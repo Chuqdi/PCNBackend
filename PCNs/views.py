@@ -140,7 +140,7 @@ class CreateGetPCN(APIView):
         )
         user.pcn_count = user.pcn_count + 1
         user.walletCount = user.walletCount -int(amount)
-        user.date_for_next_pcn_upload = now().date() + timedelta(days=30)
+        # user.date_for_next_pcn_upload = now().date() + timedelta(days=30)
         user.save()
         
         
