@@ -1,87 +1,62 @@
 
-# import json
-# import random
-# from django.db.models.signals import post_save
-# from .models import User
-# from django.dispatch import receiver
-# from django_celery_beat.models import CrontabSchedule, PeriodicTask
-# from datetime import timedelta
+import json
+import random
+import threading
+from django.db.models.signals import post_save
+from firebase_admin import messaging
+from utils.tasks import send_email
+from .models import DeviceToken, User
+from django.dispatch import receiver
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from datetime import timedelta
+from django.template.loader import render_to_string
 
 
-# def create_perodic_task(task:str,crontab:CrontabSchedule,arg):
-#     task_name = f"{task}_{arg}"
-#     try:
-#         PeriodicTask.objects.get(name=task_name).delete()
-#     except PeriodicTask.DoesNotExist:
-#         pass
-#     task = PeriodicTask.objects.create(
-#         crontab=crontab,
-#         task= f'utils.tasks.{task}',
-#         name=task_name,
-#         args=json.dumps(arg)
-#     )
-    
-#     print(task)
+
     
 
-# @receiver(post_save, sender=User) 
-# def user_created(sender, instance, created, **kwargs):
-#     if created:
-#         date_joined = instance.date_joined + timedelta(days=1)
-#         times_to_send_first_message = [7,8,9]
-#         time_to_send_first_message = random.choice(times_to_send_first_message)
+@receiver(post_save, sender=User) 
+def user_created(sender, instance, created, **kwargs):
+    if created:
+        refered_by_code = instance.refered_by_code
+        if refered_by_code and len(refered_by_code) > 1:
+            referer = User.objects.filter(referalCode = refered_by_code)
+            if referer.exists():
+                referer= referer[0]
+                referer.walletCount = referer.walletCount + 20
+                referer.save()
+                
+                title = "Thanks for Your Referral"
+                messageText = f"You have recieved 20 wallet credit following a referal sign up using your code by {instance.full_name}"
+                
+                message = render_to_string("emails/message.html", { "name":instance.full_name,"message":messageText})
+                t = threading.Thread(target=send_email, args=(title, message,[referer.email]))
+                t.start()
+                
+                
+                try:
+                    user_token = DeviceToken.objects.get(user = referer)
+
+
+                    n_message = messaging.Message(
+                        data={
+                            "screen":"Home",
+                        },
+                    notification=messaging.Notification(
+                        title=title,
+                        body=messageText,
+                    ),
+                    token=user_token.token.strip(),
+                )
+                    messaging.send(n_message)
+                    print("sent mobile")
+                except Exception as e:
+                    print(e)
+                
         
-#         ### FIRST MESSAGE 
-#         crontab,created = CrontabSchedule.objects.get_or_create(
-#             minute=7,
-#             hour=time_to_send_first_message,
-#             day_of_month=date_joined.day,
-#             month_of_year=date_joined.month,
-#             day_of_week = date_joined.isocalendar()[1]
-#         )
         
         
-        
-#         create_perodic_task(task="send_user_first_subscription_message", crontab=crontab, arg=instance.pk)
-#         print("Week")
-#         print(date_joined.isocalendar()[1])
-#         print("Day of the month")
-#         print(date_joined.day)
-#         print("Month")
-#         print(date_joined.month)
-        
-        
-#         ## SECOND MESSAGE
-#         # crontab,created = CrontabSchedule.objects.get_or_create(
-#         #     minute=7,
-#         #     hour=time_to_send_first_message + 8,
-#         #     day_of_month=date_joined.day,
-#         #     month_of_year=date_joined.month,
-#         #     day_of_week = date_joined.isocalendar()[1]
-#         # )
-        
-#         crontab,created = CrontabSchedule.objects.get_or_create(
-#             minute=46,
-#             hour=9,
-#             day_of_month=24,
-#             month_of_year=12,
-#             day_of_week = 52
-#         )
-        
-#         create_perodic_task(task="send_user_second_subscription_message", crontab=crontab, arg=instance.pk)
-        
-#         ### 24HR Message
-#         crontab,created = CrontabSchedule.objects.get_or_create(
-#             minute=7,
-#             hour=time_to_send_first_message + 24,
-#             day_of_month=date_joined.day,
-#             month_of_year=date_joined.month,
-#             day_of_week = date_joined.isocalendar()[1]
-#         )
-        
-#         create_perodic_task(task="send_user_24_hr_subscription_message", crontab=crontab, arg=instance.pk)
-        
-#         print("scheduled all tasks")
+
         
         
 
