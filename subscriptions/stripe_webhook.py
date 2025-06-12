@@ -76,17 +76,18 @@ def stripe_webhook(request):
     elif event.type == 'identity.verification_session.canceled':
         handle_canceled_session(event.data.object)
     elif event['type'] == 'identity.verification_session.processing':
-        session = event['data']['object']
-        verification = VerificationSession.objects.get(
-            stripe_session_id=session.id
-        )
-        user = User.objects.get(email = verification.user.email)
+        # session = event['data']['object']
+        handle_verified_session(event.data.object)
+        # verification = VerificationSession.objects.get(
+        #     stripe_session_id=session.id
+        # )
+        # user = User.objects.get(email = verification.user.email)
         
-        try:
-            user.document_verified = True
-            user.save()
-        except User.DoesNotExist:
-            return HttpResponse(status=404)
+        # try:
+        #     user.document_verified = True
+        #     user.save()
+        # except User.DoesNotExist:
+        #     return HttpResponse(status=404)
 
     return HttpResponse(status=200)
 
