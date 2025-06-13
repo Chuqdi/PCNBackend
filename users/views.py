@@ -49,6 +49,11 @@ class GetAllUsersView(APIView):
                 subscription__name__icontains = "PREMIUM"
             )
         
+        if searchCategory == "Standard":
+            users = users.filter(
+                subscription__name__icontains = "STANDARD"
+            )
+        
         if searchCategory == "Late":
             users = users.filter(
                 subscription__name__icontains ="Late"
@@ -95,6 +100,9 @@ class UsersDashboardStats(APIView):
         basic_users = User.objects.filter(
             subscription__name = "BASIC"
         )
+        standard_users =User.objects.filter(
+            subscription__name = "STANDARD"
+        )
         premium_users = User.objects.filter(
             subscription__name = "PREMIUM"
         )
@@ -106,6 +114,7 @@ class UsersDashboardStats(APIView):
         return ResponseGenerator.response(data={
             "users":all_users.count(),
             "basic_users":basic_users.count(),
+            "standard_users":standard_users.count(),
             "premium_users":premium_users.count(),
             "late_cover":late_cover.count(),
             "tickets":tickets.count(),
