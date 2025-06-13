@@ -296,7 +296,8 @@ class CreateSubscriptionIntent(APIView):
         }
         
        
-        if isLastCover==1 and  not user.isSubbedBefore:
+        if  not user.isSubbedBefore:
+            joiningFee = "price_1RZX2nEaYyTuzzYVlVu9Ak3G"
             line_items.append({
                 "price":joiningFee,
                 'quantity': 1,

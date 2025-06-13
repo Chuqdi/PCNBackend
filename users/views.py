@@ -99,7 +99,7 @@ class UsersDashboardStats(APIView):
             subscription__name = "PREMIUM"
         )
         late_cover =  User.objects.filter(
-            subscription__name = "PLUS"
+            subscription__name = "LATE"
         )
         tickets = PCN.objects.all()
         
