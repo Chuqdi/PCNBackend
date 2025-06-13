@@ -2,6 +2,7 @@ import threading
 from django.shortcuts import render
 from PCNs.models import PCN
 from administrators.models import Admin
+from subscriptions.models import Subscription
 from users.models import DeviceToken, ReferalCode, User
 from users.serializers import (
     ReferalCodeSerializer,
@@ -98,7 +99,7 @@ class UsersDashboardStats(APIView):
             subscription__name = "PREMIUM"
         )
         late_cover =  User.objects.filter(
-            subscription__name = "Late"
+            subscription__name = "PLUS"
         )
         tickets = PCN.objects.all()
         
@@ -643,17 +644,50 @@ class UpdateUserPhoneNumber(APIView):
     def post(self, request, email):
         user = User.objects.get(email = email )
         phoneNumber = request.data.get("phoneNumber")
+        address = request.data.get("address")
         
         if User.objects.filter(phone_number = phoneNumber).exists():
             return ResponseGenerator.response(data={}, message="User with this phone number already exists", status=status.HTTP_400_BAD_REQUEST)
+        
+        if address:
+            user.address = address
         
         user.phone_number = phoneNumber
         user.save()
         return ResponseGenerator.response(data=SignUpSerializer(user).data, message="User phone number updated", status=status.HTTP_200_OK)
 
 
+class UpgradeUserPlan(APIView):
+    def post(self, request):
+        plan = request.data.get("plan")
+        email = request.data.get("email")
+        user =User.objects.get(email=email)
+        subscription = Subscription.objects.create(
+            name=plan,
+            period="MONTHLY",
+        )
+        user.subscription = subscription
+        user.save()
+        
+        return ResponseGenerator.response(
+            data=plan,
+            message="User wallet count",
+            status=status.HTTP_200_OK
+        )
+        
 
-
+class UpgradeUserWalletCount(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        user = User.objects.get(email = email)
+        wallet_count = request.data.get("wallet_count", user.walletCount)
+        user.walletCount = wallet_count
+        user.save()
+        return ResponseGenerator.response(
+            data=wallet_count,
+            message="User wallet count",
+            status=status.HTTP_200_OK
+        )
 class GetUserDetails(APIView):
     def get(self, request, user_id):
         user =  User.objects.get(id=user_id)

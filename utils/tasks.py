@@ -42,7 +42,7 @@ def verify_user_documents(user_id, verification_id):
         user.document_verification_with_success = True
         user.save()
         message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-            Documents verification
+            You're verified! You can now upload your tickets
             '''})
         
             
@@ -55,7 +55,7 @@ def verify_user_documents(user_id, verification_id):
         send_mobile_notification(
                 user,
                 title="Documents verification",
-                message="Documents verified"
+                message="You're verified! You can now upload your tickets"
                 
             )
 

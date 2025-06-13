@@ -64,6 +64,7 @@ class User(AbstractUser):
     isSubbedBefore = models.BooleanField(default=False)
     document_verified = models.BooleanField(default=False)
     phone_number =models.TextField(null=True, blank=True, default="")
+    address =models.TextField(null=True, blank=True, default="")
     document_verification_with_success = models.BooleanField(default=False)
     profile_image = models.ImageField(null=True, blank=True, upload_to="profile_images")
 

@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetAllUsersView, GetUserDetails, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken, UsersDashboardStats,GetNewUsersView
+from .views import ActivateUserEmail, CompletePasswordReset, ContinueForgotOTPPassword, DeleteUserWithEmail, ForgotPasswordRequest, GetAllUsersView, GetUserDetails, GetUserReferalCode, GetUserWithID, LoginUserView, UpdateProfileImage, UpdateUserBasicInformation, UpdateUserPassword, UpdateUserPhoneNumber, UserMe, LogoutUser,UserMeAuth,GetUserTokenWithEmail, RegisterUserView, EditUserWithProfileImageView,GetPostAdministrators,EditUserView, ToggleUserActiveState, UsersStatsView, UpdateAdminPassword,AddUserDeviceToken, UsersDashboardStats,GetNewUsersView, UpgradeUserWalletCount, UpgradeUserPlan
 
 
 
@@ -19,6 +19,8 @@ urlpatterns = [
     path("get_users/",GetPostAdministrators.as_view(),),
     path("update_user_token/", AddUserDeviceToken.as_view(),),
     path("get_users_stats/", UsersStatsView.as_view(),),
+    path("upgrade_walletcount/", UpgradeUserWalletCount.as_view()),
+    path("upgrade_plan/", UpgradeUserPlan.as_view()),
     path("toggle_user_active_state/<int:id>/", ToggleUserActiveState.as_view()),
     path("edit_user_with_profile_image/",EditUserWithProfileImageView.as_view(),),
     path("update_admin_password/", UpdateAdminPassword.as_view()),
