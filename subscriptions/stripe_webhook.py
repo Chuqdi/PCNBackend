@@ -40,7 +40,6 @@ def send_mobile_notification(user:User, title:str,message:str,):
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    print("stripe hook started")
 
     try:
         event = stripe.Webhook.construct_event(
@@ -51,7 +50,6 @@ def stripe_webhook(request):
     except stripe.error.SignatureVerificationError as e:
         return HttpResponse(status=400)
     
-    print(event)
     
     
     
@@ -73,14 +71,14 @@ def stripe_webhook(request):
     # WHEN IDENTIFY IS COMPLETED AND IS SUCCESSFUL
     elif event.type == 'identity.verification_session.verified':
         handle_verified_session(event.data.object)
-    elif event.type == 'identity.verification_session.requires_input':
-        print("Require input")
-        handle_requires_input(event.data.object)
-    elif event.type == 'identity.verification_session.canceled':
-        handle_canceled_session(event.data.object)
-    elif event['type'] == 'identity.verification_session.processing':
-        # session = event['data']['object']
-        handle_verified_session(event.data.object)
+    # elif event.type == 'identity.verification_session.requires_input':
+    #     print("Require input")
+    #     handle_requires_input(event.data.object)
+    # elif event.type == 'identity.verification_session.canceled':
+    #     handle_canceled_session(event.data.object)
+    # elif event['type'] == 'identity.verification_session.processing':
+    #     # session = event['data']['object']
+    #     handle_verified_session(event.data.object)
         # verification = VerificationSession.objects.get(
         #     stripe_session_id=session.id
         # )
