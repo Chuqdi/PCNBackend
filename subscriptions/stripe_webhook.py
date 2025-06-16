@@ -122,8 +122,7 @@ def handle_verified_session(session):
     verification = VerificationSession.objects.get(
         stripe_session_id=session.id
     )
-    user = User.objects.get(email = verification.user.email)
-    verify_user_documents(user_id=user.id, verification_id=verification.id)
+    verify_user_documents(user_id=verification.user.id, verification_id=verification.id)
     
 
 def handle_requires_input(session):
