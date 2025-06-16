@@ -61,10 +61,10 @@ def stripe_webhook(request):
         handle_trial_will_end(event.data.object)
     if event.type == "customer.subscription.created":
         handle_subscription_created(event.data.object)
-    elif event.type == 'customer.subscription.updated':
-        handle_subscription_updated(event.data.object)
-    elif event.type == 'invoice.payment_succeeded':
-        handle_payment_succeeded(event.data.object)
+    # elif event.type == 'customer.subscription.updated':
+        # handle_subscription_updated(event.data.object)
+    # elif event.type == 'invoice.payment_succeeded':
+    #     handle_payment_succeeded(event.data.object)
     elif event.type == 'invoice.payment_failed':
         handle_payment_failed(event.data.object)
     
@@ -244,23 +244,23 @@ def handle_trial_will_end(subscription):
     except User.DoesNotExist:
         print(f"User not found for subscription: {subscription.id}")
 
-def handle_subscription_updated(subscription):
-    try:
-        user = User.objects.get(id=subscription.metadata.get('user_id'))
-        if subscription.status == 'active':
-             onsub(subscription=subscription)
-        elif subscription.status in ['incomplete', 'past_due']:
-            user.subscription = None
-            message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
-            Your subscription has been cancelled. Please renew to continue using PCN.
-            '''})
+# def handle_subscription_updated(subscription):
+#     try:
+#         user = User.objects.get(id=subscription.metadata.get('user_id'))
+#         if subscription.status == 'active':
+#              onsub(subscription=subscription)
+#         elif subscription.status in ['incomplete', 'past_due']:
+#             user.subscription = None
+#             message = render_to_string("emails/message.html", { "name":user.full_name,"message":'''
+#             Your subscription has been cancelled. Please renew to continue using PCN.
+#             '''})
             
-            t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
-            t.start()
+#             t = threading.Thread(target=send_email, args=(f"Subscription cancelled", message,[user.email]))
+#             t.start()
         
-        user.save()
-    except User.DoesNotExist:
-        print(f"User not found for subscription: {subscription.id}")
+#         user.save()
+#     except User.DoesNotExist:
+#         print(f"User not found for subscription: {subscription.id}")
 
 def handle_payment_succeeded(invoice):
     subscription = stripe.Subscription.retrieve(invoice.subscription)
