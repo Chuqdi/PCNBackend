@@ -314,6 +314,8 @@ class CreateSubscriptionIntent(APIView):
             coupons = stripe.Coupon.list()
             filtered_coupons = [coupon for coupon in coupons.data if coupon.name and discountCode in coupon.name.upper()]
             if len(filtered_coupons) > 0:
+                print("Trying here with")
+                print(filtered_coupons[0])
                 session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
