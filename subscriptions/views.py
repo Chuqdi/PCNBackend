@@ -309,45 +309,40 @@ class CreateSubscriptionIntent(APIView):
         success_url = f'https://www.pcnticket.com/?paymentModal=1&walletCount={walletCount}&name={name}&is_one_off={isOneOff}&peroid={peroid}&email={user.email}&isMobile={isMobile}'
         cancel_url = f'https://www.pcnticket.com/?payment_cancelled=1&isMobile={isMobile}'
         
+        
         if discountCode and len(discountCode) > 1:
-            # session = stripe.Subscription.create(
-            #     payment_method_types=['card'],
-            #     items=line_items,
-            #     mode='subscription',
-            #     # trial_period_days=14,
-            #     customer=user.stripe_id,
-            #     success_url=success_url,
-            #     cancel_url=cancel_url,
-            #     subscription_data=subscription_data,
-            #     discounts=[{
-            #         "coupon":discountCode,
-            #     }]
-            # )
-            session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=line_items,
-            mode='subscription',
-            # trial_period_days=14,  # This would go in subscription_data
-            customer=user.stripe_id,
-            success_url=success_url,
-            cancel_url=cancel_url,
-            subscription_data=subscription_data,
-            discounts=[{
-                "coupon": discountCode,
-            }]
-        )
-        else:
-            session = stripe.checkout.Session.create(
+            coupons = stripe.Coupon.list()
+            filtered_coupons = [coupon for coupon in coupons.data if coupon.name and discountCode in coupon.name.upper()]
+            if len(filtered_coupons) > 0:
+                session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
                 mode='subscription',
+                # trial_period_days=14,  # This would go in subscription_data
                 customer=user.stripe_id,
                 success_url=success_url,
                 cancel_url=cancel_url,
                 subscription_data=subscription_data,
+                discounts=[{
+                    "coupon": discountCode,
+                }]
             )
-        
+                return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
+            
+            
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='subscription',
+            customer=user.stripe_id,
+            success_url=success_url,
+            cancel_url=cancel_url,
+            subscription_data=subscription_data,
+        )
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
+        
+        
+        
         
         
         

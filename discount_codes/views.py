@@ -7,7 +7,7 @@ from discount_codes.models import DiscountCode
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from utils.ResponseGenerator import ResponseGenerator
-
+from rest_framework import permissions
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -16,19 +16,18 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class GetDiscountCodePercentOff(APIView):
+    permission_classes=[permissions.AllowAny]
     def get(self, request, ):
-        discountCode = request.GET.get('code')
+        discountCode = request.data.get('code')
         percent_off = 0
         if discountCode and len(discountCode) > 1:
-            promotion_codes = stripe.PromotionCode.list(
-                code=discountCode  
-            )
+           
+            
             coupons = stripe.Coupon.list()
-            print(coupons)
-            if coupons.data:
-                promotion_code = coupons.data[0]
+            filtered_coupons = [coupon for coupon in coupons.data if coupon.name and discountCode in coupon.name.upper()]
+            if len(filtered_coupons) > 0:
+                promotion_code = filtered_coupons[0]
                 percent_off = promotion_code.percent_off
-                print(percent_off)
 
         
         return ResponseGenerator.response(data=percent_off, status=status.HTTP_200_OK, message="Discount retrieved")
