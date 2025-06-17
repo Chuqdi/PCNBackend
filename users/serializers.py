@@ -54,7 +54,8 @@ class SignUpSerializer(serializers.ModelSerializer):
             "vehicle_count",
             "pcn_count",
             "walletCount",
-            "isReferalUsed"
+            "isReferalUsed",
+            "address"
         ]
 
 
