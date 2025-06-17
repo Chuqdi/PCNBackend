@@ -326,7 +326,7 @@ class CreateSubscriptionIntent(APIView):
                 cancel_url=cancel_url,
                 subscription_data=subscription_data,
                 discounts=[{
-                    "coupon": discountCode,
+                    "coupon": filtered_coupons[0].id,
                 }]
             )
                 return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
