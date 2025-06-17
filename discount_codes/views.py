@@ -18,7 +18,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class GetDiscountCodePercentOff(APIView):
     permission_classes=[permissions.AllowAny]
     def get(self, request, ):
-        discountCode = request.data.get('code')
+        discountCode = request.GET.get('code')
         percent_off = 0
         if discountCode and len(discountCode) > 1:
            
