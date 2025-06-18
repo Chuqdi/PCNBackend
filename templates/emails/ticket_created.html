@@ -25,12 +25,12 @@
         </p>
       </div>
 
-      <div style="margin-top: 20px">
+      {% comment %} <div style="margin-top: 20px">
         <p class="smallText">Date of Notice</p>
         <p class="text" style="margin-top: -13px">
           {{ ticket.date_of_notice|date:"d/m/Y"}}
         </p>
-      </div>
+      </div> {% endcomment %}
 
       <div style="margin-top: 20px">
         <p class="smallText">Amount</p>
@@ -43,10 +43,10 @@
       </div>
     </div>
 
-    <p class="text">
+    {% comment %} <p class="text">
       We are working to process this payment, payment will be processed in 24-36
       hours
-    </p>
+    </p> {% endcomment %}
     <p class="text">Best regards,</p>
     <p class="text" style="margin-top: -13px">The PCN Team</p>
   </td>

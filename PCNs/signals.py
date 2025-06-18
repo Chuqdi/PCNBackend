@@ -1,8 +1,6 @@
 
 import threading
 from django.db.models.signals import post_save
-from firebase_admin import messaging
-from users.models import DeviceToken
 from .models import PCN
 from utils.tasks import send_email
 from django.template.loader import render_to_string

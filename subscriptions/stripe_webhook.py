@@ -59,7 +59,8 @@ def stripe_webhook(request):
     #     handle_trial_will_end(event.data.object)
     # WHEN USER SUCCESSFUL SUBCRIBES
     if event.type == "customer.subscription.created":
-        handle_subscription_created(event.data.object)
+        pass
+        # handle_subscription_created(event.data.object)
     # elif event.type == 'customer.subscription.updated':
         # handle_subscription_updated(event.data.object)
     # elif event.type == 'invoice.payment_succeeded':

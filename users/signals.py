@@ -5,12 +5,11 @@ import threading
 from django.db.models.signals import post_save
 from firebase_admin import messaging
 from utils.tasks import send_email
-from .models import DeviceToken, User, VerificationSession
 from django.dispatch import receiver
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from datetime import timedelta
 from django.template.loader import render_to_string
-
+from .models import User
 
     
 

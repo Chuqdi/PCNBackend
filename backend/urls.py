@@ -1,31 +1,27 @@
 
+import threading
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
 from utils.tasks import send_email
- 
-
+from utils.tasks import send_email
+from django.template.loader import render_to_string
+from PCNs.models import PCN
 
 def test(request):
-    send_email(
-        subject="Subscription confirmation",
-        message="""
-                                                   We have gone through your data and we see your subscription was successfully and went through. Could you refresh your browser to confirm.
-                                                   """,
-       recipient_list=["2006samueldhoomun1@gmail.com"],
-       
-        
-    )
+    ticket = PCN.objects.first()
+    message = render_to_string("emails/ticket_denied.html", { "name":"m","ticket":ticket})
+    t = threading.Thread(target=send_email, args=(f"Your PCN status update", message,["morganhezekiah111@gmail.com"]))
+    t.start()
     
 
-    return render(request, "emails/message.html", {"name":"Samuel Dhoomun",
-                                                   "message":"""
-                                                   We have gone through your data and we see your subscription was successfully and went through. Could you refresh your browser to confirm.
-                                                   """
+    return render(request, "emails/ticket_denied.html", {"name":"Hezekia Morgan",
+                                                   "ticket":ticket
         ,})
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),
+    path("appeals/", include("appeals.urls")),
     path("users/", include("users.urls")),
     path("pcns/", include("PCNs.urls")),
     path("vehicles/", include("vehicles.urls")),

@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from users.models import User
@@ -53,12 +52,12 @@ class CreateGetVehicle(APIView):
         
         vehicle_number = request.data.get("vehicle_number")
         
-        if Vehicle.objects.filter(vehicle_number=vehicle_number).exists():
-            return ResponseGenerator.response(
-                message= "Vehicle with this number already exists in our system",
-                status=status.HTTP_400_BAD_REQUEST,
-                data={}
-            )
+        # if Vehicle.objects.filter(vehicle_number=vehicle_number).exists():
+        #     return ResponseGenerator.response(
+        #         message= "Vehicle with this number already exists in our system",
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #         data={}
+        #     )
        
         vehicle_make = request.data.get("vehicle_make")
         

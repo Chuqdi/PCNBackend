@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     
     "users",
     "PCNs",
+    "appeals",
     "vehicles",
     "subscriptions",
     "discount_codes",
