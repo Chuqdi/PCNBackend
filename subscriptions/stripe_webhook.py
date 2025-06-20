@@ -1,4 +1,3 @@
-import json
 import threading
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -6,7 +5,6 @@ from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.utils.timezone import now
 from datetime import datetime, timedelta, timezone
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
 import stripe
 from firebase_admin import messaging
 from django.template.loader import render_to_string
