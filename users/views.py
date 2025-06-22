@@ -357,7 +357,7 @@ class LoginUserView(APIView):
 
 
         if checking_password:
-            send_to_zapier(user)
+            send_to_zapier(SignUpSerializer(user).data)
             return ResponseGenerator.response(
                 data={"data": SignUpSerializer(user).data, "token": user.auth_token.key},
                 message="User logged in successfully",
