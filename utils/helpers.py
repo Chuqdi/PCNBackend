@@ -19,7 +19,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
     
 def send_to_zapier(data):
-    zapier_url = "https://hooks.zapier.com/hooks/catch/13735607/uolxwao/"
+    zapier_url = "https://hooks.zapier.com/hooks/catch/13525156/2icr718/"
     
     try:
         response = requests.post(
