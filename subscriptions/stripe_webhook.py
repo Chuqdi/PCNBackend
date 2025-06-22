@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.timezone import now
 from datetime import datetime, timedelta, timezone
 import stripe
+from users.serializers import SignUpSerializer
 from firebase_admin import messaging
 from django.template.loader import render_to_string
 from subscriptions.models import Subscription
@@ -110,7 +111,7 @@ def onsub(subscription):
     user.date_for_next_pcn_upload = now().date() + timedelta(minutes=10)
     user.save()
     
-    send_to_zapier(user)
+    send_to_zapier(SignUpSerializer(user).data)
     
     t = threading.Thread(target=userSubscriptionNotification, args=(user,))
     t.start()
