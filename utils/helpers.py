@@ -27,6 +27,9 @@ def send_to_zapier(data):
             json=data,
             headers={'Content-Type': 'application/json'}
         )
+        print("Zapier Hook triggered")
+        print(zapier_url)
+        print(data)
         return response.json()
     except Exception as e:
         print(f"Error sending to Zapier: {e}")
