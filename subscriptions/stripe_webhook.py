@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from subscriptions.models import Subscription
 from subscriptions.views import handleReferalCreditting, userSubscriptionNotification
 from users.models import DeviceToken, User, VerificationSession
+from utils.helpers import send_to_zapier
 from utils.tasks import send_email, verify_user_documents  
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -108,6 +109,8 @@ def onsub(subscription):
     user.walletCount = walletCount
     user.date_for_next_pcn_upload = now().date() + timedelta(minutes=10)
     user.save()
+    
+    send_to_zapier(user)
     
     t = threading.Thread(target=userSubscriptionNotification, args=(user,))
     t.start()

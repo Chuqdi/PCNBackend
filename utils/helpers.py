@@ -19,6 +19,22 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 
+def send_to_zapier(data):
+    zapier_url = "https://hooks.zapier.com/hooks/catch/13735607/uolxwao/"
+    
+    try:
+        response = requests.post(
+            zapier_url,
+            json=data,
+            headers={'Content-Type': 'application/json'}
+        )
+        return response.json()
+    except Exception as e:
+        print(f"Error sending to Zapier: {e}")
+        return None
+
+
+
 def createVirtualCard(user:User, amount:int):
     first_name = user.full_name.split(' ')[0]
     last_name = user.full_name.split(' ')[1]

@@ -22,7 +22,7 @@ from utils.ResponseGenerator import ResponseGenerator
 from utils.tasks import  send_email
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
-from utils.helpers import generateUserOTP, validateOTPCode
+from utils.helpers import generateUserOTP, send_to_zapier, validateOTPCode
 from utils.TokenGenerator import generateToken
 import datetime 
 from datetime import date
@@ -292,6 +292,7 @@ class RegisterUserView(APIView):
 
             
             responseData = {"data":s.data, "token":user.auth_token.key}
+            send_to_zapier(s.data)
             return ResponseGenerator.response(data=responseData, message="User  registered successfully", status=status.HTTP_201_CREATED)
   
             
@@ -356,6 +357,7 @@ class LoginUserView(APIView):
 
 
         if checking_password:
+            send_to_zapier(user)
             return ResponseGenerator.response(
                 data={"data": SignUpSerializer(user).data, "token": user.auth_token.key},
                 message="User logged in successfully",

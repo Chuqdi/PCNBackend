@@ -16,6 +16,7 @@ import json
 from datetime import timedelta
 from django.utils.timezone import now
 from django.template.loader import render_to_string
+from utils.helpers import send_to_zapier
 from utils.tasks import  send_email
 from firebase_admin import messaging
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -341,6 +342,8 @@ class CreateSubscriptionIntent(APIView):
             cancel_url=cancel_url,
             subscription_data=subscription_data,
         )
+        
+        send_to_zapier(session)
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
         
         
