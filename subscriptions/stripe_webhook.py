@@ -111,12 +111,13 @@ def onsub(subscription):
     user.date_for_next_pcn_upload = now().date() + timedelta(minutes=10)
     user.save()
     
-    send_to_zapier(SignUpSerializer(user).data)
     
     t = threading.Thread(target=userSubscriptionNotification, args=(user,))
     t.start()
     
     handleReferalCreditting(instance=user)
+    send_to_zapier(SignUpSerializer(user).data)
+    
 
 
 
