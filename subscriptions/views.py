@@ -341,7 +341,7 @@ class CreateSubscriptionIntent(APIView):
             subscription_data=subscription_data,
         )
         
-        send_to_zapier(SignUpSerializer(user).data)
+        # send_to_zapier(SignUpSerializer(user).data)
         return ResponseGenerator.response(data={"payment_intent":session.get("id"),"url":session.get("url"),"amount":amount}, status=status.HTTP_201_CREATED, message="Intent created successfully")
         
         

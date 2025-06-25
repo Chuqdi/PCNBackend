@@ -292,7 +292,7 @@ class RegisterUserView(APIView):
 
             
             responseData = {"data":s.data, "token":user.auth_token.key}
-            send_to_zapier(s.data)
+            # send_to_zapier(s.data)
             return ResponseGenerator.response(data=responseData, message="User  registered successfully", status=status.HTTP_201_CREATED)
   
             
@@ -357,7 +357,7 @@ class LoginUserView(APIView):
 
 
         if checking_password:
-            send_to_zapier(SignUpSerializer(user).data)
+            # send_to_zapier(SignUpSerializer(user).data)
             return ResponseGenerator.response(
                 data={"data": SignUpSerializer(user).data, "token": user.auth_token.key},
                 message="User logged in successfully",
