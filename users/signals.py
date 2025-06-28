@@ -120,6 +120,7 @@ def schedule_notifications( instance:User):
             clocked=clocked_schedule,
             task= f'utils.tasks.send_notification_email',
             name=task_name,
+            one_off=True,
             kwargs=json.dumps({
                 "user":instance.id,
                 "template":periodic_email.get("template"),
