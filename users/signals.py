@@ -104,13 +104,14 @@ def schedule_notifications( instance:User):
     ]
     
     for periodic_email in periodic_emails:
-        target_datetime = datetime.now() + timedelta(hours=periodic_email.get("time_in_hours"))
+        task_hour = periodic_email.get("time_in_hours")
+        target_datetime = datetime.now() + timedelta(hours=task_hour)
         
         clocked_schedule = ClockedSchedule.objects.create(
             clocked_time=target_datetime
         )
         
-        task_name = f"{instance.id}_{instance.email}_{periodic_email.get("time_in_hours")}"
+        task_name = f"{instance.id}_{instance.email}_{task_hour}"
         try:
             PeriodicTask.objects.get(name=task_name).delete()
         except PeriodicTask.DoesNotExist:
