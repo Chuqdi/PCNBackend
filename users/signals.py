@@ -110,7 +110,7 @@ def schedule_notifications( instance:User):
             clocked_time=target_datetime
         )
         
-        task_name = f"{instance.id}_{instance.email}"
+        task_name = f"{instance.id}_{instance.email}_{periodic_email.get("time_in_hours")}"
         try:
             PeriodicTask.objects.get(name=task_name).delete()
         except PeriodicTask.DoesNotExist:
