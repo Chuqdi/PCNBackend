@@ -1,6 +1,5 @@
 
 import json
-import random
 import threading
 from django.db.models.signals import post_save
 from firebase_admin import messaging
@@ -128,6 +127,7 @@ def schedule_notifications( instance:User):
                 "plan":periodic_email.get("plan", False)
             })
         )
+        print(task)
     
     
     print("notification email ended")

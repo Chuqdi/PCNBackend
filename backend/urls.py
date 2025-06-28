@@ -1,4 +1,5 @@
 
+from datetime import datetime
 import threading
 from django.contrib import admin
 from django.urls import path, include
@@ -8,14 +9,34 @@ from utils.helpers import send_to_zapier
 from utils.tasks import send_email
 from django.template.loader import render_to_string
 from PCNs.models import PCN
+from django_celery_beat.models import CrontabSchedule, ClockedSchedule,PeriodicTask
+from datetime import datetime, timedelta
+import json
+
 
 def test(request):
-    user = User.objects.first()
-    pcn = PCN.objects.first()
-    message = render_to_string( "emails/welcome.html", { "name":"Hezekiah", "ticket":pcn})
-    t = threading.Thread(target=send_email, args=(f"Support team", message,["morganhezekiah111@gmail.com"]))
-    t.start()
-    return render(request, "emails/welcome.html", { "name":"Hezekiah", "ticket":pcn})
+    target_datetime = datetime.now() + timedelta(hours=0.01666666666)
+    
+        
+        ### FIRST MESSAGE 
+    clocked_schedule = ClockedSchedule.objects.create(
+        clocked_time=target_datetime
+    )
+    instance = User.objects.get(email="morganhezekiah111@gmail.com")
+    task = PeriodicTask.objects.create(
+            clocked=clocked_schedule,
+            task= f'utils.tasks.send_notification_email',
+            name="test_task"+str(datetime.now().second),
+            one_off=True,
+            kwargs=json.dumps({
+                "user":instance.id,
+                "template":"first_reminder.html",
+                "subject":"test",
+                "plan":False
+            })
+        )
+    print(task)
+    return render(request, "emails/welcome.html", { "name":"Hezekiah", })
     
 urlpatterns = [
     path("test/", test),
