@@ -62,7 +62,7 @@ platformdirs==4.2.2
 prompt_toolkit==3.0.47
 proto-plus==1.24.0
 protobuf==4.25.3
-psycopg2-binary==2.9.9
+psycopg2-binary
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
