@@ -20,9 +20,10 @@ def schedule_notifications( instance:User):
     print("notification email started")
     
     periodic_emails = [
+        # 0.0833333333
         {
             "template":"first_reminder.html",
-            "time_in_hours":0.0833333333,
+            "time_in_hours":0.03333333332,
             "subject":"Your PCN Is Ready to Meet You 👋",
         },
             {
@@ -105,7 +106,6 @@ def schedule_notifications( instance:User):
     for periodic_email in periodic_emails:
         target_datetime = datetime.now() + timedelta(hours=periodic_email.get("time_in_hours"))
         
-        ### FIRST MESSAGE 
         clocked_schedule = ClockedSchedule.objects.create(
             clocked_time=target_datetime
         )
