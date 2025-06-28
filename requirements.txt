@@ -95,4 +95,4 @@ ecdsa
 dj-database-url
 django-environ
 python-dotenv
-grpcio==1.60.0
+# grpcio==1.60.0
