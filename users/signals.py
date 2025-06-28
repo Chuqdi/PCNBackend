@@ -18,6 +18,8 @@ from datetime import datetime, timedelta
     
 
 def schedule_notifications( instance:User):
+    print("notification email started")
+    
     periodic_emails = [
         {
             "template":"first_reminder.html",
@@ -125,6 +127,10 @@ def schedule_notifications( instance:User):
                 "plan":periodic_email.get("plan", False)
             })
         )
+    
+    
+    print("notification email ended")
+    
             
         
         
