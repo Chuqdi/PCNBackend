@@ -6,16 +6,139 @@ from django.db.models.signals import post_save
 from firebase_admin import messaging
 from utils.tasks import send_email
 from django.dispatch import receiver
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from datetime import timedelta
 from django.template.loader import render_to_string
-from .models import User
+from .models import User, DeviceToken
+from django_celery_beat.models import CrontabSchedule, ClockedSchedule,PeriodicTask
+from datetime import datetime, timedelta
+
 
     
+    
+    
+
+def schedule_notifications( instance:User):
+    periodic_emails = [
+        {
+            "template":"first_reminder.html",
+            "time_in_hours":1/4,
+            "subject":"Your PCN Is Ready to Meet You 👋",
+        },
+            {
+            "template":"stop_just_appealing.html",
+            "time_in_hours":24,
+            "subject":"Discover the complete PCN experience"
+            
+        },
+        {
+            "template":"more_traffic_fines.html",
+            "time_in_hours":(24 * 3),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+            {
+            "template":"benefits.html",
+            "time_in_hours":(24 * 7),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+        {
+            "template":"social_proof.html",
+            "time_in_hours":(24 * 10),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+            {
+            "template":"exclusive.html",
+            "time_in_hours":(24 * 15),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+            {
+            "template":"education_email.html",
+            "time_in_hours":(24 * 20),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+            {
+            "template":"urgency_email.html",
+            "time_in_hours":(24 * 25),
+            "subject":"Discover the complete PCN experience"
+
+        },
+            {
+            "template":"case_study_email.html",
+            "time_in_hours":(24 * 30),
+            "subject":"Discover the complete PCN experience"
+            
+        },
+        {
+            "template":"reminder_with_countdown.html",
+            "time_in_hours":(24 * 35),
+            "subject":"Discover the complete PCN experience"
+        },
+         {
+            "template":"win_back_email.html",
+            "time_in_hours":(24 * 40),
+            "subject":"Discover the complete PCN experience"
+        },
+          {
+            "template":"almost_covered.html",
+            "time_in_hours":(24 * 40),
+            "subject":"Discover the complete PCN experience"
+        },
+        {
+            "template":"stop_just_appealing.html",
+            "time_in_hours":(24 * 45),
+            "subject":"Discover the complete PCN experience"
+        },
+        {
+            "template":"second_reminder.html",
+            "time_in_hours":(24 * 50),
+            "subject":"Discover the complete PCN experience"
+        }
+         
+         
+    ]
+    
+    for periodic_email in periodic_emails:
+        target_datetime = datetime.now() + timedelta(hours=periodic_email.get("time_in_hours"))
+        
+        ### FIRST MESSAGE 
+        clocked_schedule = ClockedSchedule.objects.create(
+            clocked_time=target_datetime
+        )
+        
+        task_name = f"{instance.id}_{instance.email}"
+        try:
+            PeriodicTask.objects.get(name=task_name).delete()
+        except PeriodicTask.DoesNotExist:
+            pass
+        task = PeriodicTask.objects.create(
+            clocked=clocked_schedule,
+            task= f'utils.tasks.send_notification_email',
+            name=task_name,
+            kwargs=json.dumps({
+                "user":instance.id,
+                "template":periodic_email.get("template"),
+                "subject":periodic_email.get("subject"),
+                "plan":periodic_email.get("plan", False)
+            })
+        )
+            
+        
+        
+
+        
+        
+
+
+
 
 @receiver(post_save, sender=User) 
 def user_created(sender, instance, created, **kwargs):
     if created:
+        schedule_notifications(instance=instance)
         refered_by_code = instance.refered_by_code
         if refered_by_code and len(refered_by_code) > 1:
             referer = User.objects.filter(referalCode = refered_by_code)

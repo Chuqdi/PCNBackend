@@ -1,120 +1,200 @@
-<!DOCTYPE htmlPUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta name="format-detection" content="date=no" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta
-      name="viewport"
-      content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;"
-    />
-    <meta
-      name="viewport"
-      content="width=600,initial-scale = 2.3,user-scalable=no"
-    />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=7" />
-    <meta http-equiv="X-UA-Compatible" content="IE=8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Welcome User</title>
+    <title>Welcome to PCN</title>
+    <!--[if mso]>
+      <noscript>
+        <xml>
+          <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+          </o:OfficeDocumentSettings>
+        </xml>
+      </noscript>
+    <![endif]-->
     <style>
+
       @font-face {
         font-family: Inter;
         src: url(https://cvconnect.s3.amazonaws.com/static/fonts/Inter-Black.ttf);
       }
-      @import url("https://fonts.cdnfonts.com/css/general-sans");
-      @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
-      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-      @import url("https://fonts.cdnfonts.com/css/general-sans");
+      *{
+        font-family: Inter !important;
+      }
 
-      table {
+
+      /* Reset styles */
+      body,
+      table,
+      td,
+      p,
+      a,
+      li,
+      blockquote {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        outline: none;
+      }
+
+      /* Remove spaces around the email design */
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
         width: 100% !important;
-        border-collapse: collapse !important;
-      }
-      .wrapper {
-        width: 100%;
-        table-layout: fixed;
-        /* background-color: #fafafa; */
-        padding-bottom: 10px;
+        min-width: 100% !important;
+        background-color: #f4f4f4;
+        font-family: Arial, Helvetica, sans-serif;
       }
 
-      .main {
-        margin: 0 auto;
+      /* Client-specific styles */
+      .ReadMsgBody {
         width: 100%;
-        max-width: 800px;
-        border-spacing: 0;
-        padding-top: 56px;
-        padding-bottom: 56px;
+      }
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
       }
 
-      .two-columns {
-        text-align: center;
-        font-size: 0;
+      /* iOS blue links */
+      .appleLinks a {
+        color: #007c89;
+        text-decoration: none;
       }
 
-      .column {
-        display: inline-block;
-        vertical-align: top;
-        width: 100%;
-        max-width: 300px;
+      /* Gmail blue links */
+      u + .body .gmail-fix {
+        display: none;
       }
-      .text {
-        color: var(--Black-1, #0e0f0c);
-        font-family: "General Sans", sans-serif;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: 500;
-        line-height: normal;
-        text-decoration: none !important;
+      .cta-table {
+        margin: 20px !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
       }
-      .bordered {
-        display: flex;
-        /* padding: 32px 10px 56px 10px; */
-        padding-top: 32px;
-        padding-bottom: 32px;
-        flex-direction: column;
-        /* justify-content: centers; */
-        /* align-items: center; */
-        gap: 12px;
-        border-radius: 0px 0px 8px 8px;
-        background: #fff;
-      }
-      .footer {
-        border-collapse: separate !important;
-        border-radius: 8px;
-        border: 1px solid var(--Black-5, #cfcfce);
-        background: #fff;
-        margin-top: 20px;
-        padding-top: 32px;
-        padding-right: 2px;
-        padding-left: 2px;
-        padding-bottom: 32px;
-        margin-top: 10px;
+
+      /* Responsive styles */
+      @media only screen and (max-width: 800px) {
+        .container {
+          width: 100% !important;
+          padding: 0 !important;
+        }
+        .hero-section {
+          display: block !important;
+        }
+        .hero-text {
+          width: 100% !important;
+          display: block !important;
+          padding: 30px 20px !important;
+        }
+        .hero-image-container {
+          width: 100% !important;
+          display: block !important;
+          text-align: center !important;
+        }
+        .hero-main-image {
+          width: 100% !important;
+          max-width: 300px !important;
+          height: auto !important;
+        }
+        .profile-image {
+          width: 60px !important;
+          height: 60px !important;
+        }
+        .testimonial-row {
+          display: block !important;
+        }
+        .testimonial-cell {
+          width: 100% !important;
+          display: block !important;
+          margin-bottom: 20px !important;
+          padding: 0 20px !important;
+        }
+        .app-buttons-table {
+          width: 100% !important;
+        }
+        .app-button-cell {
+          display: block !important;
+          text-align: center !important;
+          padding: 5px 0 !important;
+        }
+        .mobile-stack {
+          display: block !important;
+          width: 100% !important;
+        }
+        .mobile-center {
+          text-align: center !important;
+        }
       }
     </style>
   </head>
   <body>
-    <center class="wrapper">
-      <table border="0" role="presentations" class="main">
-        <tr class="bordered"  >
-          <td style="width: 100%;">
-            <table class="footer" role="presentations" style="padding-top: 0px;">
-              <tr>
-                <td
-                  style="
-                    background-color: #fff;
-                    text-align: center;
-                    padding-top: 20px;
-                    padding-bottom: 20px;
-                    padding-right: 80px;
-                    padding-left: 80px;
-                  "
-                >
-                  <img
-                    src="https://pcnticket1.s3.us-east-1.amazonaws.com/email/logo.png"
-                    width="164"
-                    height="50"
-                  />
-                </td>
-              </tr>
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      style="background-color: #f4f4f4"
+    >
+      <tr>
+        <td align="center" style="padding: 20px 0">
+          <!-- Main Container -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="800"
+            class="container"
+            style="
+              background-color: #ffffff;
+              margin: 0 auto;
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <!-- Header with Logo -->
+            <tr>
+              <td
+                style="
+                  padding: 30px 0;
+                  text-align: center;
+                  background-color: #ffffff;
+                "
+              >
+                <img
+                  src="https://pcnticket1.s3.us-east-1.amazonaws.com/email/logo.png"
+                  alt="PCN Logo"
+                  style="height: 35px; width: auto"
+                />
+              </td>
+            </tr>
+
+            <!-- Header Image -->
+            <tr>
+              <td style="padding: 0">
+                <img
+                  src="https://pcnticket1.s3.us-east-1.amazonaws.com/email_header.png"
+                  alt="PCN Header"
+                  style="width: 100%; height: auto; display: block"
+                />
+              </td>
+            </tr>

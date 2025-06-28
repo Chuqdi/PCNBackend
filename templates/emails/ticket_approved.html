@@ -1,47 +1,101 @@
-{%include "emails/helpers/header.html" %}
-<tr width="100%">
-  <td style="padding: 20px">
-    <p class="text">Hello {{ name }}</p>
+{% include "emails/helpers/header.html"%}
 
-    <p class="text">
-      Your ticket has been settled. 
-    </p>
-    <div style="background: #e6fef2; padding: 20px; border-radius: 8px">
-      <div>
-        <p class="smallText">Parking Charge Number</p>
-        <p class="text" style="margin-top: -13px">
-          RG-{{ ticket.id }}/{{ ticket.vehicle.id }}
-        </p>
-      </div>
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ name }},
+                </h2>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Vehicle Registration</p>
-        <p class="text" style="margin-top: -13px">
-          {{ ticket.vehicle.vehicle_number }}
-        </p>
-      </div>
+                <p>
+                  Thank you for your payment! We’re pleased to confirm that your
+                  ticket has been successfully processed.
+                </p>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Date of Notice</p>
-        <p class="text" style="margin-top: -13px">
-          {{ ticket.date_of_notice|date:"d/m/Y"}}
-        </p>
-      </div>
+                <div
+                  style="background: #e6fef2; padding: 20px; border-radius: 8px"
+                >
+                  <div>
+                    <p class="smallText">Parking Charge Number</p>
+                    <p class="text" style="margin-top: -13px">
+                      RG-{{ ticket.id }}/{{ ticket.vehicle.id }}
+                    </p>
+                  </div>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Amount</p>
-        <p class="text" style="margin-top: -13px">£{{ ticket.amount }}</p>
-      </div>
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Vehicle Registration</p>
+                    <p class="text" style="margin-top: -13px">
+                      {{ ticket.vehicle.vehicle_number }}
+                    </p>
+                  </div>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Status</p>
-        <p class="text" style="margin-top: -13px">Paid</p>
-      </div>
-    </div>
+                  {% comment %}
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Date of Notice</p>
+                    <p class="text" style="margin-top: -13px">
+                      {{ ticket.date_of_notice|date:"d/m/Y"}}
+                    </p>
+                  </div>
+                  {% endcomment %}
 
-    <p class="text">Best regards,</p>
-    <p class="text" style="margin-top: -13px">The PCN Team</p>
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Amount</p>
+                    <p class="text" style="margin-top: -13px">
+                      £{{ ticket.amount }}
+                    </p>
+                  </div>
+
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Status</p>
+                    <p class="text" style="margin-top: -13px">Processing</p>
+                  </div>
+                </div>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </td>
 </tr>
-
-{%include "emails/helpers/footer.html" %}
+{% include "emails/helpers/footer.html"%}

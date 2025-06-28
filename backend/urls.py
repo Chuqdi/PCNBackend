@@ -3,20 +3,20 @@ import threading
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
+from users.models import User
 from utils.helpers import send_to_zapier
-from utils.tasks import send_email
 from utils.tasks import send_email
 from django.template.loader import render_to_string
 from PCNs.models import PCN
 
 def test(request):
-    send_to_zapier({
-       "from":"backend",
-       "completed":"Yes"
-   })
+    user = User.objects.first()
+    pcn = PCN.objects.first()
+    message = render_to_string( "emails/welcome.html", { "name":"Hezekiah", "ticket":pcn})
+    t = threading.Thread(target=send_email, args=(f"Support team", message,["morganhezekiah111@gmail.com"]))
+    t.start()
+    return render(request, "emails/welcome.html", { "name":"Hezekiah", "ticket":pcn})
     
-
-    return render(request, "emails/ticket_denied.html")
 urlpatterns = [
     path("test/", test),
     path('admin/', admin.site.urls),

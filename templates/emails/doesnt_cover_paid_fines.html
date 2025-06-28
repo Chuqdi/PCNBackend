@@ -1,0 +1,106 @@
+{% include "emails/helpers/header.html"%}
+
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ user.full_name }},
+                </h2>
+
+                <div>
+                  <p>
+                    You're currently on our Free Plan, which gives you access to
+                    tools to appeal your fines — but we can’t pay them unless
+                    you’re covered.
+                  </p>
+                  <p><strong>Here’s what you’re missing out on:</strong></p>
+                  <ul style="list-style: none">
+                    <li>
+                      🛑 Coverage for red routes, ULEZ & Dart charges (Premium)
+                    </li>
+                    <li>🚀 Faster handling, expert support</li>
+                  </ul>
+                  <p>Choose the right plan today and relax behind the wheel.</p>
+                </div>
+
+                <!-- CTA Button -->
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  style="margin: 20px 0"
+                  class="cta-table"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #333333;
+                        border-radius: 6px;
+                        text-align: center;
+                      "
+                    >
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 12px 24px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-size: 14px;
+                          font-weight: bold;
+                        "
+                        >Compare Plans</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+{% include "emails/helpers/footer.html"%}

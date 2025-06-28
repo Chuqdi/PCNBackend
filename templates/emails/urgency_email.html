@@ -1,0 +1,106 @@
+{% include "emails/helpers/header.html"%}
+
+
+            <!-- Hero Section -->
+            <tr>
+              <td style="padding: 0">
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  width="100%"
+                  class="hero-section"
+                >
+                  <tr>
+                   
+
+                    <!-- Right Column - Hero image and text -->
+                    <td
+                      class="hero-right"
+                      width="100%"
+                      valign="top"
+                      style="padding: 0"
+                    >
+                     
+                      <!-- Right Column Text -->
+                      <table
+                        role="presentation"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td style="padding: 20px">
+                            <h2
+                              style="
+                                margin: 0 0 15px 0;
+                                color: #333333;
+                                font-size: 16px;
+                                font-weight: normal;
+                              "
+                            >
+                              Hello {{ user.full_name }},
+                            </h2>
+
+                            <p
+                            >
+                              Your parking fines won’t wait, and neither should you. <strong>A PCN Cover</strong> ensures your fines are handled before they snowball into bigger problems.
+                              Act now and stay worry-free.
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table
+                              role="presentation"
+                              cellspacing="0"
+                              cellpadding="0"
+                              border="0"
+                              style="margin: 20px 0"
+                            >
+                              <tr>
+                                <td
+                                  style="
+                                    background-color: #333333;
+                                    border-radius: 6px;
+                                    text-align: center;
+                                  "
+                                >
+                                  <a
+                                    href="#"
+                                    style="
+                                      display: inline-block;
+                                      padding: 12px 24px;
+                                      color: #ffffff;
+                                      text-decoration: none;
+                                      font-size: 14px;
+                                      font-weight: bold;
+                                    "
+                                    >Get Covered Now</a
+                                  >
+                                </td>
+                              </tr>
+                            </table>
+
+                            <p
+                              style="
+                                margin: 15px 0 0 0;
+                                color: #666666;
+                                line-height: 1.5;
+                                font-size: 14px;
+                              "
+                            >
+                              Best regards,<br />
+                              <strong style="color: #333333"
+                                >The PCN Team</strong
+                              >
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+{% include "emails/helpers/footer.html"%}

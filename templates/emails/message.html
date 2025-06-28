@@ -1,20 +1,103 @@
-{%include "emails/helpers/header.html" %}
-<tr width="100%">
-  <td style="padding: 20px">
-    <p class="text">Hi {{ name }},</p>
+{% include "emails/helpers/header.html"%}
 
-    <p class="text" style="background:{% if btnTitle %}#fff{%else%}#e6fef2{%endif%};padding: 10px; border-radius: 8px;">
-      {{ message|safe }}
-    </p>
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ name }},
+                </h2>
+
+                <p
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  {{ message }}
+                </p>
+
+                <!-- CTA Button -->
+                {% if btnTitle %}
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  style="margin: 20px 0"
+                  class="cta-table"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #333333;
+                        border-radius: 6px;
+                        text-align: center;
+                      "
+                    >
+                      <a
+                        href="{{btnLink}}"
+                        style="
+                          display: inline-block;
+                          padding: 12px 24px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-size: 14px;
+                          font-weight: bold;
+                        "
+                        >{{ btnTitle }}</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+                {% endif %}
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </td>
 </tr>
-
-{% if btnTitle   %}
-<tr width="100%">
-  <td style="width:100%; text-align:center;">
-    <a style="height:56px; padding: 16px 30px;background: #000;border-radius: 12px;box-shadow: 0px 8px 24px 0px rgba(114, 190, 102, 0.20); color:white;text-decoration:none;" href="{{btnLink}}">{{ btnTitle }}</a>
-  </td>
-</tr>
-{% endif %}
-
-{%include "emails/helpers/footer.html" %}
+{% include "emails/helpers/footer.html"%}

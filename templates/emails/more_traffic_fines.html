@@ -1,0 +1,103 @@
+{% include "emails/helpers/header.html"%}
+
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ user.full_name }},
+                </h2>
+
+                <div>
+                  <p>
+                    Thanks for being with PCN Tickets! You’re protected — but only up to a point.
+                  </p>
+                  <p><strong>Your current plan doesn’t cover:</strong></p>
+                  <ul style="list-style: none">
+                    <li>🚫 Moving traffic offences</li>
+                    <li>🚫 ULEZ, Congestion Charge</li>
+                    <li>🚫 Dart Charge and Red Routes</li>
+                  </ul>
+                  <p>If you ever drive in a controlled zone or central London, you’ll want to be on Premium Cover. It’s just £39.99/month – way less than a single fine.</p>
+                </div>
+
+                <!-- CTA Button -->
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  style="margin: 20px 0"
+                  class="cta-table"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #333333;
+                        border-radius: 6px;
+                        text-align: center;
+                      "
+                    >
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 12px 24px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-size: 14px;
+                          font-weight: bold;
+                        "
+                        >Compare Plans</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+{% include "emails/helpers/footer.html"%}

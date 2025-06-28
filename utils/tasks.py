@@ -211,3 +211,19 @@ def send_user_fridays_subscription_message(user_id):
 @shared_task
 def verify_user_account_document(user_id, verification_id):
     verify_user_documents(user_id=user_id, verification_id=verification_id)
+    
+    
+
+
+@shared_task
+def send_notification_email(user,subject, template, plan):
+    user = User.objects.get(id = user)
+    template = f"emails/{template}"
+    email_subject = subject
+    
+    if user.subscription is None:
+        message = render_to_string(template, { "name":user.full_name,"plan":plan})
+        message = EmailMessage(email_subject, message,  settings.DEFAULT_FROM_EMAIL,[user.email])
+        message.content_subtype = 'html' 
+        message.send()
+    

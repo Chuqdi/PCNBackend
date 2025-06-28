@@ -1,38 +1,171 @@
-{%include "emails/helpers/header.html" %}
-<tr width="100%">
-  <td style="padding: 20px">
-    <p class="text">Hi {{ name }},</p>
+{% include "emails/helpers/header.html"%}
 
-    <p class="text">
-      We're thrilled to have you onboard.
-      
-    </p>
-    <p class="text">
-      With our parking ticket fine cover, you can drive worry-free, knowing that
-      we’ve got your back. <br />
-      Here’s how to get started:
-    </p>
-    <div>
-      <p class="text">1. Log in to your account</p>
-      <p class="text">2. Buy a cover</p>
-      <p class="text">
-        3. Submit ticket information: When you get a parking or penalty ticket,
-        simply take a pciture and upload it on our platform
-      </p>
-      <p class="text">4.We will sort the ticket for you</p>
-    </div>
 
-    <p class="text">
-      If you have any questions, our support team is here to help. Simply
-      contact us using the details on our contact us page.
-      
-    </p>
-    <p class="text">
-      Thank you for trusting
-      PCNTicket. We’re excited to make your driving experience smoother and more
-      confident!
-    </p>
-  </td>
-</tr>
+            <!-- Hero Section with Profile Image and Text -->
+            <tr>
+              <td style="padding: 0">
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  width="100%"
+                  class="hero-section"
+                >
+                  <tr>
+                    <!-- Left side - Profile image and text content -->
+                    <td
+                      class="hero-text mobile-stack"
+                      width="60%"
+                      valign="top"
+                      style="padding: 40px 30px; background-color: #ffffff"
+                    >
+                      <h2
+                        style="
+                          margin: 0 0 10px 0;
+                          color: #333333;
+                          font-size: 18px;
+                          font-weight: normal;
+                        "
+                      >
+                        Hello {{ user.full_name }},
+                      </h2>
+                      <h1
+                        style="
+                          margin: 0 0 20px 0;
+                          color: #00b894;
+                          font-size: 24px;
+                          font-weight: bold;
+                        "
+                      >
+                        Welcome to PCN 😊
+                      </h1>
 
-{%include "emails/helpers/footer.html" %}
+                      <p
+                        style="
+                          margin: 0 0 20px 0;
+                          color: #666666;
+                          line-height: 1.6;
+                          font-size: 14px;
+                        "
+                      >
+                        We're thrilled to have you on board.<br />
+                        With our ticket flex cover, you can drive worry-free,
+                        knowing that we've got your back, here's how to get
+                        started:
+                      </p>
+
+                      <ol
+                        style="
+                          margin: 0 0 20px 0;
+                          padding-left: 20px;
+                          color: #666666;
+                          font-size: 14px;
+                          line-height: 1.6;
+                        "
+                      >
+                        <li style="margin-bottom: 8px">
+                          Log in to your account
+                        </li>
+                        <li style="margin-bottom: 8px">Buy a cover</li>
+                        <li style="margin-bottom: 8px">
+                          Upload ticket information - When you get a parking
+                          ticket fine, simply upload it on our platform and we
+                          will sort the ticket for you.
+                        </li>
+                      </ol>
+
+                      <p
+                        style="
+                          margin: 0 0 20px 0;
+                          color: #666666;
+                          line-height: 1.6;
+                          font-size: 14px;
+                        "
+                      >
+                        If you have any questions, our support team is here to
+                        help. Simply contact us using the details on our
+                        website.
+                      </p>
+
+                      <p
+                        style="
+                          margin: 0 0 25px 0;
+                          color: #666666;
+                          line-height: 1.6;
+                          font-size: 14px;
+                        "
+                      >
+                        Thank you for trusting PCN. We're excited to make your
+                        driving experience smoother and more confident.
+                      </p>
+
+                      <!-- CTA Button -->
+                      <table
+                        role="presentation"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
+                        class="cta-table"
+                      >
+                        <tr>
+                          <td
+                            style="
+                              border-radius: 6px;
+                              background-color: #333333;
+                            "
+                          >
+                            <a
+                              href="https://www.pcnticket.com/pricing"
+                              style="
+                                display: inline-block;
+                                padding: 14px 28px;
+                                color: #ffffff;
+                                text-decoration: none;
+                                font-size: 14px;
+                                font-weight: bold;
+                                border-radius: 6px;
+                              "
+                              >Buy a cover now</a
+                            >
+                          </td>
+                        </tr>
+                      </table>
+
+                      <p
+                        style="
+                          margin: 25px 0 0 0;
+                          color: #666666;
+                          line-height: 1.6;
+                          font-size: 14px;
+                        "
+                      >
+                        Best regards,<br />
+                        <strong style="color: #333333">The PCN Team</strong>
+                      </p>
+                    </td>
+                    <!-- Right side - Main hero image -->
+                    <td
+                      class="hero-image-container mobile-stack"
+                      width="40%"
+                      valign="top"
+                      style="padding: 0"
+                    >
+                      <img
+                        src="https://pcnticket1.s3.us-east-1.amazonaws.com/man_face.png"
+                        alt="PCN Service"
+                        class="hero-main-image"
+                        style="
+                          width: 100%;
+                          height: auto;
+                          display: block;
+                          margin-top: 200px;
+                        "
+                      />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+{% include "emails/helpers/footer.html"%}

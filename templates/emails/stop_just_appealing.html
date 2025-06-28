@@ -1,0 +1,103 @@
+{% include "emails/helpers/header.html"%}
+
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ user.full_name }},
+                </h2>
+
+                <div>
+                  <p>
+                    You’ve joined PCN Tickets – great move. But did you know your Free Plan only covers appeals? With our paid covers, we’ll pay your fines for you, up to £550
+                  </p>
+                  <p><strong>📍 Whether it’s council fines, private parking, red routes, or ULEZ — we’ve got your back.</strong></p>
+                  <ul style="list-style: none">
+                    <li>✅ Peace of mind</li>
+                    <li>✅ Full UK-wide PCN protection</li>
+                    <li>✅ Legal handling done for you</li>
+                  </ul>
+                  <p>🚀 Plans start at just £14.99/month</p>
+                </div>
+
+                <!-- CTA Button -->
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  class="cta-table"
+                  border="0"
+                  style="margin: 20px 0"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #333333;
+                        border-radius: 6px;
+                        text-align: center;
+                      "
+                    >
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 12px 24px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-size: 14px;
+                          font-weight: bold;
+                        "
+                        >Compare Plans</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+{% include "emails/helpers/footer.html"%}

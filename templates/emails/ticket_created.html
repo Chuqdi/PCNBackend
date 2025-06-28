@@ -1,55 +1,116 @@
-{%include "emails/helpers/header.html" %}
-<tr width="100%">
-  <td style="padding: 20px">
-    <p class="text">Hello {{ name }}</p>
-    <h3 class="text" style="font-size: 20px; font-weight: bolder">
-      We are processing your ticket payment
-    </h3>
-    <p class="text">
-      We have received your ticket and are currently processing it. We aim to
-      settle the PCN within 5 working days, subject to our terms and conditions.
-      Please find the details below:
-    </p>
-    <div style="background: #e6fef2; padding: 20px; border-radius: 8px">
-      <div>
-        <p class="smallText">Parking Charge Number</p>
-        <p class="text" style="margin-top: -13px">
-          RG-{{ ticket.id }}/{{ ticket.vehicle.id }}
-        </p>
-      </div>
+{% include "emails/helpers/header.html"%}
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Vehicle Registration</p>
-        <p class="text" style="margin-top: -13px">
-          {{ ticket.vehicle.vehicle_number }}
-        </p>
-      </div>
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ name }},
+                </h2>
 
-      {% comment %} <div style="margin-top: 20px">
-        <p class="smallText">Date of Notice</p>
-        <p class="text" style="margin-top: -13px">
-          {{ ticket.date_of_notice|date:"d/m/Y"}}
-        </p>
-      </div> {% endcomment %}
+                <p
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  <strong>We are processing your ticket payment</strong>
+                </p>
+                <p>
+                  We have received your ticket request and are currently
+                  processing it. Please find the details below:
+                </p>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Amount</p>
-        <p class="text" style="margin-top: -13px">£{{ ticket.amount }}</p>
-      </div>
+                <div
+                  style="background: #e6fef2; padding: 20px; border-radius: 8px"
+                >
+                  <div>
+                    <p class="smallText">Parking Charge Number</p>
+                    <p class="text" style="margin-top: -13px">
+                      RG-{{ ticket.id }}/{{ ticket.vehicle.id }}
+                    </p>
+                  </div>
 
-      <div style="margin-top: 20px">
-        <p class="smallText">Status</p>
-        <p class="text" style="margin-top: -13px">Processing</p>
-      </div>
-    </div>
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Vehicle Registration</p>
+                    <p class="text" style="margin-top: -13px">
+                      {{ ticket.vehicle.vehicle_number }}
+                    </p>
+                  </div>
 
-    {% comment %} <p class="text">
-      We are working to process this payment, payment will be processed in 24-36
-      hours
-    </p> {% endcomment %}
-    <p class="text">Best regards,</p>
-    <p class="text" style="margin-top: -13px">The PCN Team</p>
+                  {% comment %}
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Date of Notice</p>
+                    <p class="text" style="margin-top: -13px">
+                      {{ ticket.date_of_notice|date:"d/m/Y"}}
+                    </p>
+                  </div>
+                  {% endcomment %}
+
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Amount</p>
+                    <p class="text" style="margin-top: -13px">
+                      £{{ ticket.amount }}
+                    </p>
+                  </div>
+
+                  <div style="margin-top: 20px">
+                    <p class="smallText">Status</p>
+                    <p class="text" style="margin-top: -13px">Processing</p>
+                  </div>
+                </div>
+
+                <p>
+                  We are working to process this payment, payment will be
+                  processed in 24-36 hours
+                </p>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </td>
 </tr>
-
-{%include "emails/helpers/footer.html" %}
+{% include "emails/helpers/footer.html"%}

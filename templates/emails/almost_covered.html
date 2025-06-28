@@ -1,0 +1,102 @@
+{% include "emails/helpers/header.html"%}
+
+<!-- Hero Section -->
+<tr>
+  <td style="padding: 0">
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      class="hero-section"
+    >
+      <tr>
+        <!-- Right Column - Hero image and text -->
+        <td class="hero-right" width="100%" valign="top" style="padding: 0">
+          <!-- Right Column Text -->
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="100%"
+          >
+            <tr>
+              <td style="padding: 20px">
+                <h2
+                  style="
+                    margin: 0 0 15px 0;
+                    color: #333333;
+                    font-size: 16px;
+                    font-weight: normal;
+                  "
+                >
+                  Hello {{ user.full_name }},
+                </h2>
+
+                <div>
+                  <p>
+                    You're one step away from full <strong>PCN protection.</strong> With PCN Tickets, you can manage, appeal, and even have fines paid — <strong>but first, let’s complete your setup:</strong>
+                  </p>
+                  <ul style="list-style: none;">
+                    <li>✅ Add your vehicle registration</li>
+                    <li>✅ Select your cover level</li>
+                    <li>✅ Sit back and relax</li>
+                  </ul>
+                  <p>🚗 Plans start at just £14.99/month</p>
+                </div>
+
+                <!-- CTA Button -->
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  style="margin: 20px 0"
+                  class="cta-table"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background-color: #333333;
+                        border-radius: 6px;
+                        text-align: center;
+                      "
+                    >
+                      <a
+                        href="#"
+                        style="
+                          display: inline-block;
+                          padding: 12px 24px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-size: 14px;
+                          font-weight: bold;
+                        "
+                        >Complete My Setup</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <p
+                  style="
+                    margin: 15px 0 0 0;
+                    color: #666666;
+                    line-height: 1.5;
+                    font-size: 14px;
+                  "
+                >
+                  Best regards,<br />
+                  <strong style="color: #333333">The PCN Team</strong>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+{% include "emails/helpers/footer.html"%}
