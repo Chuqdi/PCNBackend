@@ -22,7 +22,7 @@ def schedule_notifications( instance:User):
     periodic_emails = [
         {
             "template":"first_reminder.html",
-            "time_in_hours":(1/8),
+            "time_in_hours":0.0833333333,
             "subject":"Your PCN Is Ready to Meet You 👋",
         },
             {
