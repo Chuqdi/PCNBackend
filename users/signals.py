@@ -86,14 +86,10 @@ def schedule_notifications( instance:User):
         },
           {
             "template":"almost_covered.html",
-            "time_in_hours":(24 * 40),
-            "subject":"Discover the complete PCN experience"
-        },
-        {
-            "template":"stop_just_appealing.html",
             "time_in_hours":(24 * 45),
             "subject":"Discover the complete PCN experience"
         },
+       
         {
             "template":"second_reminder.html",
             "time_in_hours":(24 * 50),

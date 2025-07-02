@@ -15,28 +15,8 @@ import json
 
 
 def test(request):
-    target_datetime = datetime.now() + timedelta(hours=0.01666666666)
-    
-        
-        ### FIRST MESSAGE 
-    clocked_schedule = ClockedSchedule.objects.create(
-        clocked_time=target_datetime
-    )
-    instance = User.objects.get(email="morganhezekiah111@gmail.com")
-    task = PeriodicTask.objects.create(
-            clocked=clocked_schedule,
-            task= f'utils.tasks.send_notification_email',
-            name="test_task"+str(datetime.now().second),
-            one_off=True,
-            kwargs=json.dumps({
-                "user":instance.id,
-                "template":"first_reminder.html",
-                "subject":"test",
-                "plan":False
-            })
-        )
-    print(task)
-    return render(request, "emails/welcome.html", { "name":"Hezekiah", })
+    user = User.objects.first()
+    return render(request, "emails/second_reminder.html", { "user":user, })
     
 urlpatterns = [
     path("test/", test),
