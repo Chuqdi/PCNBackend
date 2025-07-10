@@ -338,6 +338,12 @@ class LoginUserView(APIView):
     def post(self, request):
         user = User.objects.filter(email__iexact=request.data.get("email"))
         isAdmin = request.data.get("isAdmin", False)
+        if not user.exists():
+            return ResponseGenerator.response(
+                message="User with this email was not found",
+                data={},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         if user.exists() and not user[0].is_active:
             return ResponseGenerator.response(
                 message="Sorry User account is not activated",
